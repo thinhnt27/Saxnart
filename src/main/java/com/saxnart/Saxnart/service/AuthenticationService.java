@@ -53,9 +53,7 @@ public class AuthenticationService {
 //        setCategory.stream().forEach(a -> authorities.add(new SimpleGrantedAuthority(a.getName())));
         var jwtToken = jwtService.generateToken(user, authorities);
         var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
-
         return AuthenticationResponse.builder().token(jwtToken).refreshToken(jwtRefreshToken).build();
-
     }
 //        AuthenticationReponse authenticationReponse = new AuthenticationReponse();
 //        authenticationReponse.setToken(jwtToken);

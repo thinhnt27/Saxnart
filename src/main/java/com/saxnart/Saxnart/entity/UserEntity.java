@@ -48,15 +48,13 @@ public class UserEntity implements UserDetails {
     private  Boolean isVerify;
 
 
-    @Column
-    private String reason;
 
 
     @ManyToMany
     @JsonIgnore
     @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "Users_Id"),
-            inverseJoinColumns = @JoinColumn(name = "Roles_Id"))
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
     public UserEntity(String fullName, String username, String email, String hashedpassword, String picture, Boolean status, Boolean isVerify) {
@@ -77,9 +75,6 @@ public class UserEntity implements UserDetails {
         roles.stream().forEach(i ->authorities.add(new SimpleGrantedAuthority(i.getName())));
         return List.of(new SimpleGrantedAuthority(authorities.toString()));
     }
-
-
-
 
     public UserEntity(Long id, String fullName, String username, String email, String hashedpassword, Set<RoleEntity> roles) {
         this.id = id;

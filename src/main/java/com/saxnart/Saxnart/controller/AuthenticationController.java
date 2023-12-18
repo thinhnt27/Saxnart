@@ -28,7 +28,7 @@ import java.util.*;
 @RestController
 @RequestMapping("api/v1/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:5173", "https://fublog.tech"})
+@CrossOrigin(origins = {"http://localhost:5173"})
 //@CrossOrigin(origins = "*")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
@@ -54,31 +54,21 @@ public class AuthenticationController {
 
     @GetMapping("/getAllUser")
     public List<UserEntity> getAllUser(){
-        return  userService.getAllUser();
+        return userService.getAllUser();
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
         Optional<UserEntity> o_user = userRepository.findByUsernameAndStatusTrue(authenticationRequest.getUsername());
         if(o_user.isPresent()){
             String encodedPasswordFromDatabase  = o_user.get().getPassword();
-//            if (!userRepository.existsByUsername(authenticationRequest.getUsername()))
-//                return ResponseEntity.badRequest().body(new MessageResponse("Error: User or password are incorect"));
-//            else
                 if(!passwordEncoder.matches(authenticationRequest.getPassword(),encodedPasswordFromDatabase)){
                 return ResponseEntity.badRequest().body(new MessageResponse("Error: Username or password is wrong!"));
             }else{
                 return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
             }
         }else return ResponseEntity.badRequest().body(new MessageResponse("Error: Username or password is wrong!"));
-//        String encodedPasswordFromDatabase  = getEncodedPasswordFromDatabase(authenticationRequest.getUsername());
-        //        }else if((storedPassword != hashedPassword))
-        //        if (!userRepository.existsByUsername(authenticationRequest.getUsername())) {
-        //            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username or password is wrong!"));
-
-
     }
 
     @PostMapping("/signup")
@@ -95,7 +85,7 @@ public class AuthenticationController {
                     signUpRequest.getUsername(),
                     signUpRequest.getEmail(),
                     encoder.encode(signUpRequest.getPassword()),
-                    "https://firebasestorage.googleapis.com/v0/b/fublog-6a7cf.appspot.com/o/files%2Fdefault-avatar.png?alt=media&token=876d6a33-39a1-4d03-a81c-cd291144fdef&_gl=1*1allgyf*_ga*MTYyODg2MDg2MC4xNjg0Njg2NjQy*_ga_CW55HF8NVT*MTY5Njk0MzI1My4xMDMuMS4xNjk2OTQzMzk0LjM2LjAuMA&fbclid=IwAR3D93i-DgqUvJPJkuAe0eoNEJV6atVqChekdobAkufvqDgN4qDinZQxoiM",
+                    "",
                     true,
                     true
             );
@@ -104,7 +94,6 @@ public class AuthenticationController {
             RoleEntity userRole = roleRepository.findByName("USER");
             roleEntities.add(userRole);
             user.setRoles(roleEntities);
-
             userRepository.save(user);
         }else{
             UserEntity user = new UserEntity(signUpRequest.getFullName(),
@@ -115,15 +104,12 @@ public class AuthenticationController {
                     true,
                     true
             );
-
             Set<RoleEntity> roleEntities = new HashSet<>();
             RoleEntity userRole = roleRepository.findByName("USER");
             roleEntities.add(userRole);
             user.setRoles(roleEntities);
-
             userRepository.save(user);
         }
-
         AuthenticationRequest authenticationRequest = new AuthenticationRequest(signUpRequest.getUsername(), signUpRequest.getPassword());
         return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
     }

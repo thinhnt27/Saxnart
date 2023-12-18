@@ -30,7 +30,7 @@ public class RoleEntity {
 
     @ManyToMany(mappedBy = "roles")
     @JsonIgnore
-    private Set<UserEntity> user = new HashSet<>();
+    private Set<UserEntity> users = new HashSet<>();
 
     public RoleEntity(Long id, String name) {
         this.id = id;
