@@ -1,0 +1,49 @@
+package com.saxnart.Saxnart.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Objects;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "BookingDetail")
+public class BookingDetailEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "booking_id")
+    private BookingEntity booking;
+
+    @ManyToOne
+    @JoinColumn(name = "ticket_type_id")
+    private TicketTypeEntity ticketType;
+
+    @Column
+    private int price;
+
+    @Column
+    private  int numOfTickets;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        BookingDetailEntity booking = (BookingDetailEntity) obj;
+        return Objects.equals(id, booking.getId());
+    }
+}

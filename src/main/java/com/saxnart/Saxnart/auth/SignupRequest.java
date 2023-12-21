@@ -13,7 +13,7 @@ public class SignupRequest {
     private String fullName;
     private String username;
     private String email;
-    private String password = "1";
-    private String picture;
+    private String password;
+    private String picture = null;
     private Set<String> role;
 }

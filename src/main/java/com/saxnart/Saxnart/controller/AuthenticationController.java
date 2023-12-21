@@ -86,7 +86,6 @@ public class AuthenticationController {
                     signUpRequest.getEmail(),
                     encoder.encode(signUpRequest.getPassword()),
                     "",
-                    true,
                     true
             );
 
@@ -101,7 +100,6 @@ public class AuthenticationController {
                     signUpRequest.getEmail(),
                     encoder.encode(signUpRequest.getPassword()),
                     signUpRequest.getPicture(),
-                    true,
                     true
             );
             Set<RoleEntity> roleEntities = new HashSet<>();
@@ -114,37 +112,37 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
     }
 
-    @PostMapping("google")
-    public ResponseEntity<?> loginGoogle(@Valid @RequestBody SignupRequest signUpRequest) {
-
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        Optional<UserEntity> o_user = userRepository.findByUsernameAndStatusTrue(signUpRequest.getEmail());
-        if (o_user.isPresent()) {
-            String encodedPasswordFromDatabase = o_user.get().getPassword();
-            if (!passwordEncoder.matches(signUpRequest.getPassword(), encodedPasswordFromDatabase)) {
-                return ResponseEntity.badRequest().body(new MessageResponse("Error: Username or password is wrong!"));
-            } else {
-                AuthenticationRequest authenticationRequest = new AuthenticationRequest(signUpRequest.getEmail(), signUpRequest.getPassword());
-                return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
-            }
-        }
-        UserEntity user = new UserEntity(signUpRequest.getFullName(),
-                signUpRequest.getEmail(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()),
-                signUpRequest.getPicture(),
-                true,
-                true
-        );
-        Set<RoleEntity> roleEntities = new HashSet<>();
-        RoleEntity userRole = roleRepository.findByName("USER");
-        roleEntities.add(userRole);
-        user.setRoles(roleEntities);
-        userRepository.save(user);
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest(signUpRequest.getEmail(), signUpRequest.getPassword());
-        return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
-    }
+//    @PostMapping("google")
+//    public ResponseEntity<?> loginGoogle(@Valid @RequestBody SignupRequest signUpRequest) {
+//
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//
+//        Optional<UserEntity> o_user = userRepository.findByUsernameAndStatusTrue(signUpRequest.getEmail());
+//        if (o_user.isPresent()) {
+//            String encodedPasswordFromDatabase = o_user.get().getPassword();
+//            if (!passwordEncoder.matches(signUpRequest.getPassword(), encodedPasswordFromDatabase)) {
+//                return ResponseEntity.badRequest().body(new MessageResponse("Error: Username or password is wrong!"));
+//            } else {
+//                AuthenticationRequest authenticationRequest = new AuthenticationRequest(signUpRequest.getEmail(), signUpRequest.getPassword());
+//                return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
+//            }
+//        }
+//        UserEntity user = new UserEntity(signUpRequest.getFullName(),
+//                signUpRequest.getEmail(),
+//                signUpRequest.getEmail(),
+//                encoder.encode(signUpRequest.getPassword()),
+//                signUpRequest.getPicture(),
+//                true,
+//                true
+//        );
+//        Set<RoleEntity> roleEntities = new HashSet<>();
+//        RoleEntity userRole = roleRepository.findByName("USER");
+//        roleEntities.add(userRole);
+//        user.setRoles(roleEntities);
+//        userRepository.save(user);
+//        AuthenticationRequest authenticationRequest = new AuthenticationRequest(signUpRequest.getEmail(), signUpRequest.getPassword());
+//        return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
+//    }
 
 //    @GetMapping("/getUserInfo")
 //    public UserDTO InfoUser(@RequestHeader("Authorization") String token) {

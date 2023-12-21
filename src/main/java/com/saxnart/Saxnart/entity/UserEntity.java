@@ -41,13 +41,7 @@ public class UserEntity implements UserDetails {
     @Column
     private String picture;
 
-    @Column
-    private  Boolean status;
-
-    @Column
-    private  Boolean isVerify;
-
-
+    @Column Boolean status;
 
 
     @ManyToMany
@@ -57,14 +51,13 @@ public class UserEntity implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "roles_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
-    public UserEntity(String fullName, String username, String email, String hashedpassword, String picture, Boolean status, Boolean isVerify) {
+    public UserEntity(String fullName, String username, String email, String hashedpassword, String picture, Boolean status) {
         this.fullName = fullName;
         this.username = username;
         this.email = email;
         this.hashedpassword = hashedpassword;
         this.picture = picture;
         this.status = status;
-        this.isVerify = isVerify;
     }
 
 
