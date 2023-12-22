@@ -25,7 +25,7 @@ public class BookingController {
     public ResponseEntity<ResponseObject> bookSeats(@RequestBody BookingRequestDTO booking) {
         String bookedBooking = bookingService.bookSeats(booking);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("ok", "booking is successfully", bookedBooking));
+                .body(new ResponseObject("ok", bookedBooking, ""));
     }
     @GetMapping("/seats/{bookingId}")
     public ResponseEntity<ResponseObject> getSeatsByBookingId(@PathVariable Long bookingId) {
