@@ -44,10 +44,15 @@ public class BookingEntity {
     private double totalPrice;
 
     @OneToMany(mappedBy = "booking")
-    private Set<SeatEntity> seats = new HashSet<>();
+    private Set<BookingSeatEntity> bookingSeats = new HashSet<>();
 
     @OneToMany(mappedBy = "booking")
     private Set<BookingDetailEntity> bookingDetails = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "showtime_id")
+    private ShowEntity showtime;
 
 
     @Override

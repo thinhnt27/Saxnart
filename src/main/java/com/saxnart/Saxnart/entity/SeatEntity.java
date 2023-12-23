@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -20,13 +22,9 @@ public class SeatEntity {
     @Column(name = "seat_num", length = 15)
     private String seatNum;
 
-    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
-    private Boolean isBook = false;
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "book_id")
-    private BookingEntity booking;
+    @OneToMany(mappedBy = "seat")
+    private Set<BookingSeatEntity> bookingSeats = new HashSet<>();
 
     @Override
     public int hashCode() {

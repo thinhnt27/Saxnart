@@ -1,8 +1,6 @@
 package com.saxnart.Saxnart.controller;
 
-import com.saxnart.Saxnart.dto.request.BookingRequestDTO;
-import com.saxnart.Saxnart.entity.BookingEntity;
-import com.saxnart.Saxnart.entity.SeatEntity;
+import com.saxnart.Saxnart.dto.BookingDTO;
 import com.saxnart.Saxnart.model.ResponseObject;
 import com.saxnart.Saxnart.service.BookingService;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/booking")
@@ -21,16 +17,28 @@ public class BookingController {
 
     @Autowired
     private BookingService bookingService;
-    @PostMapping("/book")
-    public ResponseEntity<ResponseObject> bookSeats(@RequestBody BookingRequestDTO booking) {
-        String bookedBooking = bookingService.bookSeats(booking);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("ok", bookedBooking, ""));
+
+    @PostMapping("/create")
+    public ResponseEntity<ResponseObject> createBooking(@RequestBody BookingDTO bookingDTO) {
+        try {
+            boolean checkBooked = bookingService.createBooking(bookingDTO);
+            if(checkBooked) return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", ""));
+                else return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "this seat is not empty", ""));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error creating booking", ""));
+                    //new ResponseEntity<>("Error creating booking", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    @GetMapping("/seats/{bookingId}")
-    public ResponseEntity<ResponseObject> getSeatsByBookingId(@PathVariable Long bookingId) {
-        List<SeatEntity> seats = bookingService.getSeatsByBookingId(bookingId);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("ok", "Seats by bookingID", seats));
-    }
+//    @PostMapping("/book")
+//    public ResponseEntity<ResponseObject> bookSeats(@RequestBody BookingRequestDTO booking) {
+//        String bookedBooking = bookingService.bookSeats(booking);
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(new ResponseObject("ok", bookedBooking, ""));
+//    }
+//    @GetMapping("/seats/{bookingId}")
+//    public ResponseEntity<ResponseObject> getSeatsByBookingId(@PathVariable Long bookingId) {
+//        List<SeatEntity> seats = bookingService.getSeatsByBookingId(bookingId);
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(new ResponseObject("ok", "Seats by bookingID", seats));
+//    }
 }

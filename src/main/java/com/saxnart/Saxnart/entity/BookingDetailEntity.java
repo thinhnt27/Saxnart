@@ -1,5 +1,6 @@
 package com.saxnart.Saxnart.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,10 +22,12 @@ public class BookingDetailEntity {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "booking_id")
     private BookingEntity booking;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "ticket_type_id")
     private TicketTypeEntity ticketType;
 
