@@ -60,7 +60,7 @@ public class BookingService {
         return true;
     }
     public List<BookingDetailResponse> getBookingDetailsByShowTime(Long showTimeId) {
-        List<BookingEntity> bookings = bookingRepository.findByShowtime_Id(showTimeId);
+        List<BookingEntity> bookings = bookingRepository.findByStatusIsTrueAndShowtime_Id(showTimeId);
 
         List<BookingDetailResponse> bookingDetailsResponses = new ArrayList<>();
         for (BookingEntity booking : bookings) {
@@ -73,8 +73,13 @@ public class BookingService {
         return bookingDetailsResponses;
     }
 
-        // Chuyển đổi BookingEntity thành BookingDetailResponse hoặc sử dụng ModelMapper
-//    public List<SeatEntity> getSeatsByBookingId(Long bookingId) {
-//        return (List<SeatEntity>) seatRepository.findAllByBooking_Id(bookingId);
-//    }
+    public List<BookingEntity> getAllBooking(){
+        return bookingRepository.findAll();
+    }
+
+    public List<BookingEntity> getAllBookingByShow(Long showTimeId){
+        return bookingRepository.findByShowtime_Id(showTimeId);
+    }
+
+
 }

@@ -21,7 +21,6 @@ public class BookingDetailController {
     public ResponseEntity<ResponseObject> getBookingDetailsByShow(@PathVariable Long showtimeId) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.getBookingDetailsByShowTime(showtimeId)));
-
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error, something wrong", ""));
             //new ResponseEntity<>("Error creating booking", HttpStatus.INTERNAL_SERVER_ERROR);

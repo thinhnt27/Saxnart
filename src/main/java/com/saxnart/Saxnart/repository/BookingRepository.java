@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
     List<BookingEntity> findByShowtime_Id(Long showTimeId);
+
+    List<BookingEntity> findByStatusIsTrueAndShowtime_Id(Long showTimeId);
 }

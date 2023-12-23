@@ -37,5 +37,5 @@ public class FeedbackEntity {
     private Date createdDate =  new Date();
 
     @Column
-    private String status;
+    private Boolean status;
 }

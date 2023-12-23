@@ -26,19 +26,24 @@ public class BookingController {
                 else return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "this seat is not empty", ""));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error creating booking", ""));
-                    //new ResponseEntity<>("Error creating booking", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-//    @PostMapping("/book")
-//    public ResponseEntity<ResponseObject> bookSeats(@RequestBody BookingRequestDTO booking) {
-//        String bookedBooking = bookingService.bookSeats(booking);
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(new ResponseObject("ok", bookedBooking, ""));
-//    }
-//    @GetMapping("/seats/{bookingId}")
-//    public ResponseEntity<ResponseObject> getSeatsByBookingId(@PathVariable Long bookingId) {
-//        List<SeatEntity> seats = bookingService.getSeatsByBookingId(bookingId);
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(new ResponseObject("ok", "Seats by bookingID", seats));
-//    }
+
+    @GetMapping("/getAllBooking")
+    public ResponseEntity<ResponseObject> getAllBooking(){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.getAllBooking()));
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking", ""));
+        }
+    }
+
+    @GetMapping("/getAllBooking/{showtimeId}")
+    public ResponseEntity<ResponseObject> getAllBookingByShow(@PathVariable Long showtimeId){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.getAllBookingByShow(showtimeId)));
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking", ""));
+        }
+    }
 }

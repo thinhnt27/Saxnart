@@ -28,6 +28,9 @@ public class ShowEntity {
     @Column
     private Date showDate;
 
+    @Column
+    private String picture;
+
     @OneToMany(mappedBy = "showtime")
     private Set<BookingEntity> bookings = new HashSet<>();
 
