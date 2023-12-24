@@ -76,38 +76,15 @@ public class AuthenticationController {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
         }
-
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
-        }
-        if(signUpRequest.getPicture() == null){
             UserEntity user = new UserEntity(signUpRequest.getFullName(),
                     signUpRequest.getUsername(),
-                    signUpRequest.getEmail(),
                     encoder.encode(signUpRequest.getPassword()),
-                    "",
-                    true
-            );
-
+                    true);
             Set<RoleEntity> roleEntities = new HashSet<>();
             RoleEntity userRole = roleRepository.findByName("ADMIN");
             roleEntities.add(userRole);
             user.setRoles(roleEntities);
             userRepository.save(user);
-        }else{
-            UserEntity user = new UserEntity(signUpRequest.getFullName(),
-                    signUpRequest.getUsername(),
-                    signUpRequest.getEmail(),
-                    encoder.encode(signUpRequest.getPassword()),
-                    signUpRequest.getPicture(),
-                    true
-            );
-            Set<RoleEntity> roleEntities = new HashSet<>();
-            RoleEntity userRole = roleRepository.findByName("USER");
-            roleEntities.add(userRole);
-            user.setRoles(roleEntities);
-            userRepository.save(user);
-        }
         AuthenticationRequest authenticationRequest = new AuthenticationRequest(signUpRequest.getUsername(), signUpRequest.getPassword());
         return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
     }
@@ -135,7 +112,7 @@ public class AuthenticationController {
         return ResponseEntity.badRequest().body(new MessageResponse("Can not have new token!!!"));
     }
 
-    @PutMapping("/updateUserPassword/{userId}")
+    @PatchMapping("/updateUserPassword/{userId}")
     public ResponseEntity<ResponseObject> updateUserPassword(@RequestHeader("Authorization") String token,
                                                              @PathVariable Long userId,
                                                              @RequestBody UserPasswordUpdateDTO userPasswordUpdateDTO) {
