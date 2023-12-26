@@ -31,6 +31,12 @@ public class ShowEntity {
     @Column
     private String picture;
 
+    @Column
+    private String author;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String content;
+
     @OneToMany(mappedBy = "showtime")
     private Set<BookingEntity> bookings = new HashSet<>();
 
