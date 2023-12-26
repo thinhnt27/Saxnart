@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -27,14 +26,9 @@ public class JwtService {
 //                .withSubject(user.getUsername())
 //                .withClaim("id", user.getId())
                 .withClaim("user",user.getUsername())
-//                .withClaim("fullname",user.getFullName())
-//                .withClaim("email",user.getEmail())
-//                .withClaim("picture", user.getPicture())
+                .withClaim("fullname",user.getFullName())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 3600*1000))
                 .withClaim("roles", authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-//                .withClaim("categories", authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-
-//                .withClaim("categories", user.getCategories().stream().toList())
                 .sign(algorithm);
     }
 
@@ -44,9 +38,7 @@ public class JwtService {
 //                .withSubject(user.getUsername())
 //                .withClaim("id", user.getId())
                 .withClaim("user",user.getUsername())
-//                .withClaim("fullname",user.getFullName())
-//                .withClaim("email",user.getEmail())
-//                .withClaim("picture", user.getPicture())
+                .withClaim("fullname",user.getFullName())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 30L*3600*24*1000))
                 .withClaim("roles", authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);

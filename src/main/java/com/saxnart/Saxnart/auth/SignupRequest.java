@@ -12,8 +12,6 @@ import java.util.Set;
 public class SignupRequest {
     private String fullName;
     private String username;
-    private String email;
-    private String password = "1";
-    private String picture;
+    private String password;
     private Set<String> role;
 }
