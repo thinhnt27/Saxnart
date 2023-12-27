@@ -34,10 +34,15 @@ public class ShowEntity {
     @Column
     private String author;
 
+    @Column
+    private Boolean isSpecial;
+
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
     @OneToMany(mappedBy = "showtime")
     private Set<BookingEntity> bookings = new HashSet<>();
+
+
 
 }

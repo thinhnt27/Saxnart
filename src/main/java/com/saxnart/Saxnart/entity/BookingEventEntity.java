@@ -31,8 +31,7 @@ public class BookingEventEntity {
     private String content;
 
     @Column
-    @CreatedDate
-    private Date createdDate;
+    private String createdDate;
 
     @Column
     private Boolean status;
