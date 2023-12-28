@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/feedbacks")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:5173"})
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class FeedbackController {
 
     @Autowired
@@ -45,7 +45,7 @@ public class FeedbackController {
         }
     }
 
-    @PostMapping("/creatFeedback")
+    @PostMapping("/createFeedback")
     public ResponseEntity<ResponseObject> saveFeedback(@RequestBody FeedbackEntity feedback) {
         try {
             FeedbackEntity savedFeedback = feedbackService.saveFeedback(feedback);

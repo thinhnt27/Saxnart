@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/bookingevent")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:5173"})
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class BookingEventController {
 
     @Autowired
@@ -43,7 +43,7 @@ public class BookingEventController {
         }
     }
 
-    @PostMapping("/creatBookingEvent")
+    @PostMapping("/createBookingEvent")
     public ResponseEntity<ResponseObject> saveFeedback(@RequestBody BookingEventEntity bookingEvent) {
         try {
             BookingEventEntity savedBookingEvent = bookingEventService.saveBookingEvent(bookingEvent);

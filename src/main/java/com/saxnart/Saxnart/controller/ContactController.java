@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/contact")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:5173"})
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class ContactController {
 
     @Autowired
@@ -43,7 +43,7 @@ public class ContactController {
         }
     }
 
-    @PostMapping("/creatContact")
+    @PostMapping("/createContact")
     public ResponseEntity<ResponseObject> saveFeedback(@RequestBody ContactEntity contact) {
         try {
             ContactEntity savedFeedback = contactService.saveContact(contact);
