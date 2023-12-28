@@ -45,7 +45,7 @@ public class FeedbackController {
         }
     }
 
-    @PostMapping("/creatFeedback")
+    @PostMapping("/createFeedback")
     public ResponseEntity<ResponseObject> saveFeedback(@RequestBody FeedbackEntity feedback) {
         try {
             FeedbackEntity savedFeedback = feedbackService.saveFeedback(feedback);

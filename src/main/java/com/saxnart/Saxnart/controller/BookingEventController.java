@@ -43,7 +43,7 @@ public class BookingEventController {
         }
     }
 
-    @PostMapping("/creatBookingEvent")
+    @PostMapping("/createBookingEvent")
     public ResponseEntity<ResponseObject> saveFeedback(@RequestBody BookingEventEntity bookingEvent) {
         try {
             BookingEventEntity savedBookingEvent = bookingEventService.saveBookingEvent(bookingEvent);

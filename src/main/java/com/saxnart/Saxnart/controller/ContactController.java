@@ -43,7 +43,7 @@ public class ContactController {
         }
     }
 
-    @PostMapping("/creatContact")
+    @PostMapping("/createContact")
     public ResponseEntity<ResponseObject> saveFeedback(@RequestBody ContactEntity contact) {
         try {
             ContactEntity savedFeedback = contactService.saveContact(contact);
