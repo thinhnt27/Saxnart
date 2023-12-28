@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/show")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:5173"})
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class ShowController {
 
     @Autowired
@@ -36,4 +36,5 @@ public class ShowController {
                     .body(new ResponseObject("error", "Error get seat by show", ""));
         }
     }
+
 }
