@@ -31,7 +31,10 @@ public class BookingEventEntity {
     private String content;
 
     @Column
-    private String createdDate;
+    private Date createdDate;
+
+    @Column
+    private Date eventDate;
 
     @Column
     private Boolean status;
