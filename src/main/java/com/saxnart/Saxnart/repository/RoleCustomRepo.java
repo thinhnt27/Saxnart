@@ -19,8 +19,8 @@ public class RoleCustomRepo {
     private EntityManager entityManager;
 
     public List<RoleEntity> getRole(UserEntity user){
-        //StringBuilder sql = new StringBuilder().append("SELECT saxnart.role.name as name FROM saxnart.user join saxnart.user_role on saxnart.user.id = saxnart.user_role.users_id join saxnart.role on saxnart.role.id = saxnart.user_role.roles_id");
-        StringBuilder sql = new StringBuilder().append("SELECT sax03147_localhost.role.name as name FROM sax03147_localhost.user join sax03147_localhost.user_role on sax03147_localhost.user.id = sax03147_localhost.user_role.users_id join sax03147_localhost.role on sax03147_localhost.role.id = sax03147_localhost.user_role.roles_id");
+        StringBuilder sql = new StringBuilder().append("SELECT saxnart.role.name as name FROM saxnart.user join saxnart.user_role on saxnart.user.id = saxnart.user_role.users_id join saxnart.role on saxnart.role.id = saxnart.user_role.roles_id");
+        //StringBuilder sql = new StringBuilder().append("SELECT sax03147_localhost.role.name as name FROM sax03147_localhost.user join sax03147_localhost.user_role on sax03147_localhost.user.id = sax03147_localhost.user_role.users_id join sax03147_localhost.role on sax03147_localhost.role.id = sax03147_localhost.user_role.roles_id");
 
         sql.append(" Where 1=1");
         if(user.getUsername() != null){
