@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @Setter
@@ -28,4 +30,18 @@ public class BookingSeatEntity {
     @JsonIgnore
     @JoinColumn(name = "seat_id")
     private SeatEntity seat;
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        BookingSeatEntity booking = (BookingSeatEntity) obj;
+        return Objects.equals(id, booking.getId());
+    }
 }
