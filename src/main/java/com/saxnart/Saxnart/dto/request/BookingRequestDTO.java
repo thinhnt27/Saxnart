@@ -1,39 +1,31 @@
-package com.saxnart.Saxnart.entity;
+package com.saxnart.Saxnart.dto.request;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
+import java.util.List;
 
-@Entity
+@Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@Table(name = "Contact")
-public class ContactEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class BookingRequestDTO {
     private Long id;
-
-    @Column
     private String name;
-
-    @Column
     private String email;
 
-    @Column
     private String telephoneNum;
 
-    @Column(columnDefinition = "LONGTEXT")
     private String content;
 
-    @Column
-    @CreatedDate
     private Date createdDate;
 
-    @Column
     private Boolean status;
+
+    private double totalPrice;
+
+    private List<String> seatNum;
 }

@@ -3,6 +3,7 @@ package com.saxnart.Saxnart.service;
 import com.saxnart.Saxnart.dto.BookingDTO;
 import com.saxnart.Saxnart.dto.BookingDetailDTO;
 import com.saxnart.Saxnart.dto.BookingSeatDTO;
+import com.saxnart.Saxnart.dto.request.BookingRequestDTO;
 import com.saxnart.Saxnart.dto.response.BookingDetailResponse;
 import com.saxnart.Saxnart.entity.BookingDetailEntity;
 import com.saxnart.Saxnart.entity.BookingEntity;
@@ -77,8 +78,27 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public List<BookingEntity> getAllBookingByShow(Long showTimeId){
-        return bookingRepository.findByShowtime_Id(showTimeId);
+    public List<BookingRequestDTO> getAllBookingByShow(Long showTimeId){
+        List<BookingEntity> bookings = bookingRepository.findByShowtime_Id(showTimeId);
+        List<BookingRequestDTO> bookingRequests =new ArrayList<>();
+        for (BookingEntity booking: bookings) {
+            BookingRequestDTO bookingRequestDTO = new BookingRequestDTO();
+            bookingRequestDTO.setId(booking.getId());
+            bookingRequestDTO.setName(booking.getName());
+            bookingRequestDTO.setEmail(booking.getEmail());
+            bookingRequestDTO.setTelephoneNum(booking.getTelephoneNum());
+            bookingRequestDTO.setContent(booking.getContent());
+            bookingRequestDTO.setCreatedDate(booking.getCreatedDate());
+            bookingRequestDTO.setStatus(booking.getStatus());
+            bookingRequestDTO.setTotalPrice(bookingRequestDTO.getTotalPrice());
+            List<String> seatNum = new ArrayList<>();
+            for (BookingSeatEntity bookingSeat: booking.getBookingSeats()) {
+                seatNum.add(bookingSeat.getSeat().getSeatNum());
+            }
+            bookingRequestDTO.setSeatNum(seatNum);
+            bookingRequests.add(bookingRequestDTO);
+        }
+        return bookingRequests;
     }
 
 

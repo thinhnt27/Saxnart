@@ -20,7 +20,7 @@ public class ContactController {
     @Autowired
     private ContactService contactService;
     @GetMapping
-    public ResponseEntity<ResponseObject> getAllFeedbacks() {
+    public ResponseEntity<ResponseObject> getAllContacts() {
         try {
             List<ContactEntity> contacts = contactService.getAllContacts();
             return ResponseEntity.ok(new ResponseObject("ok", "Success", contacts));
@@ -32,10 +32,10 @@ public class ContactController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getFeedbackById(@PathVariable Long id) {
+    public ResponseEntity<ResponseObject> getContactById(@PathVariable Long id) {
         try {
-            ContactEntity feedback = contactService.getContactById(id);
-            return ResponseEntity.ok(new ResponseObject("ok", "Success", feedback));
+            ContactEntity contact = contactService.getContactById(id);
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", contact));
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -44,10 +44,10 @@ public class ContactController {
     }
 
     @PostMapping("/createContact")
-    public ResponseEntity<ResponseObject> saveFeedback(@RequestBody ContactEntity contact) {
+    public ResponseEntity<ResponseObject> saveContact(@RequestBody ContactEntity contact) {
         try {
-            ContactEntity savedFeedback = contactService.saveContact(contact);
-            return ResponseEntity.ok(new ResponseObject("ok", "Success", savedFeedback));
+            ContactEntity savedContact = contactService.saveContact(contact);
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", savedContact));
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
