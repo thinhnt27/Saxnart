@@ -22,4 +22,12 @@ public class ShowService {
         List<ShowEntity> shows = showRepository.findAll();
         return shows;
     }
+
+    public List<ShowEntity> getShowHaveSpecialIsTrue(){
+        return showRepository.findByIsSpecialIsTrue();
+    }
+
+    public List<ShowEntity> getShowHaveSpecialIsFalse(){
+        return showRepository.findByIsSpecialIsFalse();
+    }
 }

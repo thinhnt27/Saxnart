@@ -26,7 +26,7 @@ public class ShowController {
     @Autowired
     private ShowService showService;
     @GetMapping("/getAllShow")
-    public ResponseEntity<ResponseObject> getAllSeats() {
+    public ResponseEntity<ResponseObject> getAllShows() {
         try {
             List<ShowEntity> allSeats = showService.getAllShow();
             return ResponseEntity.ok(new ResponseObject("ok", "Success", allSeats));
@@ -37,4 +37,28 @@ public class ShowController {
         }
     }
 
+    @GetMapping("/getShowsSpecialTrue")
+    public ResponseEntity<ResponseObject> getShowsBySpecialTrue() {
+        try {
+            List<ShowEntity> allShow = showService.getShowHaveSpecialIsTrue();
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get seat by show", ""));
+        }
+    }
+
+
+    @GetMapping("/getShowsSpecialFalse")
+    public ResponseEntity<ResponseObject> getShowsBySpecialFalse() {
+        try {
+            List<ShowEntity> allShow = showService.getShowHaveSpecialIsFalse();
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get seat by show", ""));
+        }
+    }
 }
