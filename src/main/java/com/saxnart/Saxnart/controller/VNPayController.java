@@ -35,7 +35,7 @@ public class VNPayController {
         //String bankCode = "";
 
         String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
-        String vnp_IpAddr = "127.0.0.1";
+        String vnp_IpAddr = "112.78.3.79";
 
         String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
 
