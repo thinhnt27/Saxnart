@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.saxnart.Saxnart.utility.ConvertDTO.*;
 
@@ -62,7 +63,6 @@ public class BookingService {
     }
     public List<BookingDetailResponse> getBookingDetailsByShowTime(Long showTimeId) {
         List<BookingEntity> bookings = bookingRepository.findByStatusIsTrueAndShowtime_Id(showTimeId);
-
         List<BookingDetailResponse> bookingDetailsResponses = new ArrayList<>();
         for (BookingEntity booking : bookings) {
             BookingDetailResponse bookingDetailsResponse = new BookingDetailResponse();
@@ -79,7 +79,7 @@ public class BookingService {
     }
 
     public List<BookingRequestDTO> getAllBookingByShow(Long showTimeId){
-        List<BookingEntity> bookings = bookingRepository.findByShowtime_Id(showTimeId);
+        List<BookingEntity> bookings = bookingRepository.findByStatusIsTrueAndShowtime_Id(showTimeId);
         List<BookingRequestDTO> bookingRequests =new ArrayList<>();
         for (BookingEntity booking: bookings) {
             BookingRequestDTO bookingRequestDTO = new BookingRequestDTO();
@@ -99,6 +99,36 @@ public class BookingService {
             bookingRequests.add(bookingRequestDTO);
         }
         return bookingRequests;
+    }
+
+    public List<String> getAllBookingSeatNumByShow(Long showTimeId){
+        List<BookingEntity> bookings = bookingRepository.findByStatusIsTrueAndShowtime_Id(showTimeId);
+        List<String> seatNum = new ArrayList<>();
+        for (BookingEntity booking: bookings) {
+            for (BookingSeatEntity bookingSeat: booking.getBookingSeats()) {
+                seatNum.add(bookingSeat.getSeat().getSeatNum());
+            }
+        }
+        return seatNum;
+    }
+
+    public List<String> checkSeatStatusInShow(Long showTimeId, List<String> seatNum){
+        List<String> listSeatNumInShow =  getAllBookingSeatNumByShow(showTimeId);
+        List<String> resultList = new ArrayList<>();
+        for (String listSeatNum: listSeatNumInShow) {
+            seatNum.stream()
+                    .filter(seat -> seat.equals(listSeatNum))
+                    .forEach(resultList::add);
+        }
+        return resultList.isEmpty() ? null : resultList;
+    }
+    public String updateStatusBooking(BookingEntity booking){
+        BookingEntity bookingEntity = bookingRepository.findByEmailAndShowtime_IdAndNameAndCreatedDate(booking.getEmail(),booking.getShowtime().getId(), booking.getName(), booking.getCreatedDate());
+        if(bookingEntity != null){
+            bookingEntity.setStatus(false);
+            bookingRepository.save(bookingEntity);
+            return "Update status booking success";
+        }else  return "Booking does not exit";
     }
 
 

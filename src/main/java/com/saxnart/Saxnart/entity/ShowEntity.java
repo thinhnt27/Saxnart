@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,7 +45,5 @@ public class ShowEntity {
     @OneToMany(mappedBy = "showtime")
     @JsonIgnore
     private Set<BookingEntity> bookings = new HashSet<>();
-
-
 
 }

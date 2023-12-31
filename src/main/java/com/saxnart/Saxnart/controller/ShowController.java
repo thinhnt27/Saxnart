@@ -10,11 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -61,4 +59,39 @@ public class ShowController {
                     .body(new ResponseObject("error", "Error get seat by show", ""));
         }
     }
+
+    @PostMapping("creatShow")
+    public ResponseEntity<ResponseObject> creatShow(@RequestBody ShowEntity show){
+        try {
+            showService.creatShow(show);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", ""));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error creating show", ""));
+        }
+    }
+    @GetMapping("/getShowsSpecialFalseAndAfterDate/")
+    public ResponseEntity<ResponseObject> getShowsBySpecialFalseAndAfterDate() {
+        try {
+            List<ShowEntity> allShow = showService.findShowsAfterDateAndSpecialIsFalse(String.valueOf(LocalDate.now()));
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get seat by show", ""));
+        }
+    }
+
+    @GetMapping("/getShowsSpecialTrueAndAfterDate/")
+    public ResponseEntity<ResponseObject> getShowsBySpecialTrueAndAfterDate() {
+        try {
+            List<ShowEntity> allShow = showService.findShowsAfterDateAndSpecialIsTrue(String.valueOf(LocalDate.now()));
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get seat by show", ""));
+        }
+    }
+
+
 }

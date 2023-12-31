@@ -1,6 +1,7 @@
 package com.saxnart.Saxnart.controller;
 
 import com.saxnart.Saxnart.dto.BookingDTO;
+import com.saxnart.Saxnart.entity.BookingEntity;
 import com.saxnart.Saxnart.model.ResponseObject;
 import com.saxnart.Saxnart.service.BookingService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/booking")
@@ -44,6 +47,35 @@ public class BookingController {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.getAllBookingByShow(showtimeId)));
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking", ""));
+        }
+    }
+    @GetMapping("/getAllBookingSeatNum/{showtimeId}")
+    public ResponseEntity<ResponseObject> getAllBookingSeatNum(@PathVariable Long showtimeId){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.getAllBookingSeatNumByShow(showtimeId)));
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking", ""));
+        }
+    }
+
+    @GetMapping("/CheckBookingSeatNum/{showtimeId}")
+    public ResponseEntity<ResponseObject> CheckBookingSeatNum(@PathVariable Long showtimeId, @RequestBody List<String> seatNum){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.checkSeatStatusInShow(showtimeId, seatNum)));
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking", ""));
+        }
+    }
+
+    @PatchMapping("cancel")
+    public ResponseEntity<ResponseObject> markContactAsRead(@RequestBody BookingEntity bookingEntity) {
+        try {
+            bookingService.updateStatusBooking(bookingEntity);
+            return ResponseEntity.ok(new ResponseObject("ok", bookingService.updateStatusBooking(bookingEntity), ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get all booking", ""));
         }
     }
 }

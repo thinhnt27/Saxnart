@@ -30,4 +30,16 @@ public class ShowService {
     public List<ShowEntity> getShowHaveSpecialIsFalse(){
         return showRepository.findByIsSpecialIsFalse();
     }
+
+    public void creatShow(ShowEntity showEntity){
+        showRepository.save(showEntity);
+    }
+
+    public List<ShowEntity> findShowsAfterDateAndSpecialIsTrue(String currentDate) {
+        return showRepository.findSpecialTrueShowsAfterCurrentDate(currentDate);
+    }
+
+    public List<ShowEntity> findShowsAfterDateAndSpecialIsFalse(String currentDate) {
+        return showRepository.findSpecialFalseShowsAfterCurrentDate(currentDate);
+    }
 }
