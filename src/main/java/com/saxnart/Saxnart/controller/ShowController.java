@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -69,10 +70,12 @@ public class ShowController {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error creating show", ""));
         }
     }
-    @GetMapping("/getShowsSpecialFalseAndAfterDate/")
+    @GetMapping("/getShowsSpecialFalseAndAfterDate")
     public ResponseEntity<ResponseObject> getShowsBySpecialFalseAndAfterDate() {
         try {
-            List<ShowEntity> allShow = showService.findShowsAfterDateAndSpecialIsFalse(String.valueOf(LocalDate.now()));
+            LocalDate currentDate = LocalDate.now();
+            Date currentDateSql = java.sql.Date.valueOf(currentDate);
+            List<ShowEntity> allShow = showService.findShowsAfterDateAndSpecialIsFalse(currentDateSql);
             return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,10 +84,25 @@ public class ShowController {
         }
     }
 
-    @GetMapping("/getShowsSpecialTrueAndAfterDate/")
+    @GetMapping("/getShowsSpecialTrueAndAfterDate")
     public ResponseEntity<ResponseObject> getShowsBySpecialTrueAndAfterDate() {
         try {
-            List<ShowEntity> allShow = showService.findShowsAfterDateAndSpecialIsTrue(String.valueOf(LocalDate.now()));
+            LocalDate currentDate = LocalDate.now();
+            Date currentDateSql = java.sql.Date.valueOf(currentDate);
+            List<ShowEntity> allShow = showService.findShowsAfterDateAndSpecialIsTrue(currentDateSql);
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get seat by show", ""));
+        }
+    }
+    @GetMapping("/getShowsAfterDate")
+    public ResponseEntity<ResponseObject> getShowsByAfterDate() {
+        try {
+            LocalDate currentDate = LocalDate.now();
+            Date currentDateSql = java.sql.Date.valueOf(currentDate);
+            List<ShowEntity> allShow = showService.findShowsAfterDate(currentDateSql);
             return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
         } catch (Exception e) {
             e.printStackTrace();

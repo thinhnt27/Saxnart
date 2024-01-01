@@ -7,6 +7,7 @@ import com.saxnart.Saxnart.repository.ShowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,11 +36,15 @@ public class ShowService {
         showRepository.save(showEntity);
     }
 
-    public List<ShowEntity> findShowsAfterDateAndSpecialIsTrue(String currentDate) {
+    public List<ShowEntity> findShowsAfterDateAndSpecialIsTrue(Date currentDate) {
         return showRepository.findSpecialTrueShowsAfterCurrentDate(currentDate);
     }
 
-    public List<ShowEntity> findShowsAfterDateAndSpecialIsFalse(String currentDate) {
+    public List<ShowEntity> findShowsAfterDateAndSpecialIsFalse(Date currentDate) {
         return showRepository.findSpecialFalseShowsAfterCurrentDate(currentDate);
+    }
+
+    public List<ShowEntity> findShowsAfterDate(Date currentDate) {
+        return showRepository.findShowsAfterCurrentDate(currentDate);
     }
 }
