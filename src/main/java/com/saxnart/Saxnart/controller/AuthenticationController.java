@@ -32,7 +32,7 @@ import java.util.*;
 @RestController
 @RequestMapping("api/v1/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000","https://saxnartclub.com"})
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
