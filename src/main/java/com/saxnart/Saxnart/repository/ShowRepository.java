@@ -18,13 +18,13 @@ public interface ShowRepository extends JpaRepository<ShowEntity, Long> {
 
     List<ShowEntity> findByIsSpecialIsFalse();
 
-    @Query("SELECT s FROM ShowEntity s WHERE DATE(s.showDate) >= :currentDate AND s.isSpecial = true")
+    @Query("SELECT s FROM ShowEntity s WHERE DATE(s.showDate) >= :currentDate AND s.isSpecial = true ORDER BY s.showDate ASC")
     List<ShowEntity> findSpecialTrueShowsAfterCurrentDate(@Param("currentDate") Date currentDate);
 
-    @Query("SELECT s FROM ShowEntity s WHERE DATE(s.showDate) >= :currentDate AND s.isSpecial = false")
+    @Query("SELECT s FROM ShowEntity s WHERE DATE(s.showDate) >= :currentDate AND s.isSpecial = false ORDER BY s.showDate ASC")
     List<ShowEntity> findSpecialFalseShowsAfterCurrentDate(@Param("currentDate") Date currentDate);
 
-    @Query("SELECT s FROM ShowEntity s WHERE DATE(s.showDate) >= :currentDate")
+    @Query("SELECT s FROM ShowEntity s WHERE DATE(s.showDate) >= :currentDate ORDER BY s.showDate ASC")
     List<ShowEntity> findShowsAfterCurrentDate(@Param("currentDate") Date currentDate);
 
 }

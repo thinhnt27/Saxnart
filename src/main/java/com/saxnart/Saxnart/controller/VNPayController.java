@@ -100,7 +100,7 @@ public class VNPayController {
     @GetMapping("/vnpay-payment")
     public ResponseEntity<ResponseObject> getPaymentInfor(@RequestParam(value = "vnp_Amount") String vnp_Amount,
                                                           @RequestParam(value = "vnp_BankCode") String vnp_BankCode,
-                                                          @RequestParam(value = "vnp_BankTranNo") String vnp_BankTranNo,
+//                                                          @RequestParam(value = "vnp_BankTranNo") String vnp_BankTranNo,
                                                           @RequestParam(value = "vnp_CardType") String vnp_CardType,
                                                           @RequestParam(value = "vnp_OrderInfo") String vnp_OrderInfo,
                                                           @RequestParam(value = "vnp_PayDate") String vnp_PayDate,
@@ -115,7 +115,7 @@ public class VNPayController {
         try {
             encodeAndPut(fields, "vnp_Amount", vnp_Amount);
             encodeAndPut(fields, "vnp_BankCode", vnp_BankCode);
-            encodeAndPut(fields, "vnp_BankTranNo", vnp_BankTranNo);
+//            encodeAndPut(fields, "vnp_BankTranNo", vnp_BankTranNo);
             encodeAndPut(fields, "vnp_CardType", vnp_CardType);
             encodeAndPut(fields, "vnp_OrderInfo", vnp_OrderInfo);
             encodeAndPut(fields, "vnp_PayDate", vnp_PayDate);
