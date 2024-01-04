@@ -68,10 +68,22 @@ public class BookingController {
     }
 
     @PatchMapping("cancel")
-    public ResponseEntity<ResponseObject> markContactAsRead(@RequestBody BookingEntity bookingEntity) {
+    public ResponseEntity<ResponseObject> bookingCancel(@RequestBody BookingDTO bookingEntity) {
         try {
             bookingService.updateStatusBooking(bookingEntity);
             return ResponseEntity.ok(new ResponseObject("ok", bookingService.updateStatusBooking(bookingEntity), ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get all booking", ""));
+        }
+    }
+
+    @PatchMapping("checkBooking")
+    public ResponseEntity<ResponseObject> checkBookingOver15minute(@RequestBody BookingDTO bookingEntity) {
+        try {
+            bookingService.checkBookingOver15minute(bookingEntity);
+            return ResponseEntity.ok(new ResponseObject("ok", bookingService.checkBookingOver15minute(bookingEntity), ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
