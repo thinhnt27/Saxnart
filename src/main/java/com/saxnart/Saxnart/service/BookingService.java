@@ -13,7 +13,13 @@ import com.saxnart.Saxnart.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -122,14 +128,38 @@ public class BookingService {
         }
         return resultList.isEmpty() ? null : resultList;
     }
-    public String updateStatusBooking(BookingEntity booking){
-        BookingEntity bookingEntity = bookingRepository.findByEmailAndShowtime_IdAndNameAndCreatedDate(booking.getEmail(),booking.getShowtime().getId(), booking.getName(), booking.getCreatedDate());
+    public String updateStatusBooking(BookingDTO booking){
+        BookingEntity bookingEntity = bookingRepository.findByEmailAndShowtime_IdAndNameAndCreatedDate(booking.getEmail(),booking.getShowtimeId(), booking.getName(), booking.getCreatedDate());
         if(bookingEntity != null){
             bookingEntity.setStatus(false);
             bookingRepository.save(bookingEntity);
             return "Update status booking success";
         }else  return "Booking does not exit";
     }
+    public String checkBookingOver15minute(BookingDTO booking) throws ParseException {
+        BookingEntity bookingEntity = bookingRepository.findByEmailAndShowtime_IdAndNameAndCreatedDate(
+                booking.getEmail(), booking.getShowtimeId(), booking.getName(), booking.getCreatedDate());
+
+        if (bookingEntity != null) {
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            Date currentDate = Date.from(currentDateTime.atZone(ZoneId.systemDefault()).toInstant());
+            Date bookingDateTime = bookingEntity.getCreatedDate();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+            String bookingDateTimeString = dateFormat.format(bookingDateTime);
+            Date parsedBookingDateTime = dateFormat.parse(bookingDateTimeString);
+            Date modifiedBookingDateTime = Date.from(parsedBookingDateTime.toInstant().plus(Duration.ofMinutes(15)));
+            if (modifiedBookingDateTime.before(currentDate)) {
+                bookingEntity.setStatus(false);
+                bookingRepository.save(bookingEntity);
+                return "Booking is over payment session";
+            } else {
+                return "Payment session is still valid";
+            }
+        } else {
+            return "Booking does not exist";
+        }
+    }
+
 
 
 }

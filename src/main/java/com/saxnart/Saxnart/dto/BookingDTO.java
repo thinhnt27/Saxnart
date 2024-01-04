@@ -1,5 +1,6 @@
 package com.saxnart.Saxnart.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.util.Date;
@@ -16,6 +17,8 @@ public class BookingDTO {
     private String email;
     private String telephoneNum;
     private String content;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "Asia/Ho_Chi_Minh")
     private Date createdDate;
     private Boolean status;
     private double totalPrice;

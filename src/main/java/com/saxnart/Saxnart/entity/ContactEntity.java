@@ -3,6 +3,7 @@ package com.saxnart.Saxnart.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -32,6 +33,8 @@ public class ContactEntity {
 
     @Column
     @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private Date createdDate;
 
     @Column
