@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/payment")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://saxnartclub.com"})
 public class VNPayController {
 
     @GetMapping("/pay")
@@ -38,7 +38,6 @@ public class VNPayController {
         String vnp_IpAddr = "127.0.0.1";
 
         String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
-
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
@@ -54,8 +53,11 @@ public class VNPayController {
         vnp_Params.put("vnp_ReturnUrl", VNPayConfig.vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
+//        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+//        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
@@ -98,7 +100,7 @@ public class VNPayController {
     @GetMapping("/vnpay-payment")
     public ResponseEntity<ResponseObject> getPaymentInfor(@RequestParam(value = "vnp_Amount") String vnp_Amount,
                                                           @RequestParam(value = "vnp_BankCode") String vnp_BankCode,
-                                                          @RequestParam(value = "vnp_BankTranNo") String vnp_BankTranNo,
+//                                                          @RequestParam(value = "vnp_BankTranNo") String vnp_BankTranNo,
                                                           @RequestParam(value = "vnp_CardType") String vnp_CardType,
                                                           @RequestParam(value = "vnp_OrderInfo") String vnp_OrderInfo,
                                                           @RequestParam(value = "vnp_PayDate") String vnp_PayDate,
@@ -113,7 +115,7 @@ public class VNPayController {
         try {
             encodeAndPut(fields, "vnp_Amount", vnp_Amount);
             encodeAndPut(fields, "vnp_BankCode", vnp_BankCode);
-            encodeAndPut(fields, "vnp_BankTranNo", vnp_BankTranNo);
+//            encodeAndPut(fields, "vnp_BankTranNo", vnp_BankTranNo);
             encodeAndPut(fields, "vnp_CardType", vnp_CardType);
             encodeAndPut(fields, "vnp_OrderInfo", vnp_OrderInfo);
             encodeAndPut(fields, "vnp_PayDate", vnp_PayDate);

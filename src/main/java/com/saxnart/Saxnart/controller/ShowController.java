@@ -10,17 +10,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("api/show")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://saxnartclub.com"})
 public class ShowController {
 
     @Autowired
@@ -61,4 +60,56 @@ public class ShowController {
                     .body(new ResponseObject("error", "Error get seat by show", ""));
         }
     }
+
+    @PostMapping("creatShow")
+    public ResponseEntity<ResponseObject> creatShow(@RequestBody ShowEntity show){
+        try {
+            showService.creatShow(show);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", ""));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error creating show", ""));
+        }
+    }
+    @GetMapping("/getShowsSpecialFalseAndAfterDate")
+    public ResponseEntity<ResponseObject> getShowsBySpecialFalseAndAfterDate() {
+        try {
+            LocalDate currentDate = LocalDate.now();
+            Date currentDateSql = java.sql.Date.valueOf(currentDate);
+            List<ShowEntity> allShow = showService.findShowsAfterDateAndSpecialIsFalse(currentDateSql);
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get seat by show", ""));
+        }
+    }
+
+    @GetMapping("/getShowsSpecialTrueAndAfterDate")
+    public ResponseEntity<ResponseObject> getShowsBySpecialTrueAndAfterDate() {
+        try {
+            LocalDate currentDate = LocalDate.now();
+            Date currentDateSql = java.sql.Date.valueOf(currentDate);
+            List<ShowEntity> allShow = showService.findShowsAfterDateAndSpecialIsTrue(currentDateSql);
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get seat by show", ""));
+        }
+    }
+    @GetMapping("/getShowsAfterDate")
+    public ResponseEntity<ResponseObject> getShowsByAfterDate() {
+        try {
+            LocalDate currentDate = LocalDate.now();
+            Date currentDateSql = java.sql.Date.valueOf(currentDate);
+            List<ShowEntity> allShow = showService.findShowsAfterDate(currentDateSql);
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get seat by show", ""));
+        }
+    }
+
+
 }

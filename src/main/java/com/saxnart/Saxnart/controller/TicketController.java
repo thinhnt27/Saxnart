@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/ticket")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://saxnartclub.com"})
 public class TicketController {
 
     @Autowired
@@ -30,7 +30,7 @@ public class TicketController {
             List<TicketDTO> allSeats = ticketTypeService.getAllTicket();
             return ResponseEntity.ok(new ResponseObject("ok", "Success", allSeats));
         } catch (Exception e) {
-            e.printStackTrace(); // In ra console để xem lỗi
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseObject("error", "Error get seat by show", ""));
         }
