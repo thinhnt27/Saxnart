@@ -44,6 +44,9 @@ public class BookingEntity {
     private Boolean status;
 
     @Column
+    private Boolean isPayment;
+
+    @Column
     private double totalPrice;
 
     @OneToMany(mappedBy = "booking")

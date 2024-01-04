@@ -90,4 +90,16 @@ public class BookingController {
                     .body(new ResponseObject("error", "Error get all booking", ""));
         }
     }
+
+    @PatchMapping("paymentSuccess")
+    public ResponseEntity<ResponseObject> paymentSuccess(@RequestBody BookingDTO bookingEntity) {
+        try {
+            bookingService.paymentSuccess(bookingEntity);
+            return ResponseEntity.ok(new ResponseObject("ok", bookingService.paymentSuccess(bookingEntity), ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get all booking", ""));
+        }
+    }
 }

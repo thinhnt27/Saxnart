@@ -21,6 +21,7 @@ public class BookingDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "Asia/Ho_Chi_Minh")
     private Date createdDate;
     private Boolean status;
+    private Boolean isPayment;
     private double totalPrice;
     private List<BookingSeatDTO> bookingSeats;
     private List<BookingDetailDTO> bookingDetails;

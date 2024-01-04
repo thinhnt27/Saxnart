@@ -10,6 +10,7 @@ import org.aspectj.apache.bcel.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,9 @@ public class SeatController {
 
     @Autowired
     private SeatRepository seatRepository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
 
     @GetMapping("/seatByShowtimeId/{showtimeId}")
@@ -54,6 +58,7 @@ public class SeatController {
     @GetMapping("/status/{showtimeId}")
     public ResponseEntity<ResponseObject> getSeatStatusByShowtime(@PathVariable Long showtimeId) {
         try {
+            jdbcTemplate.execute("CALL UpdateBookingStatus()");
             List<SeatResponse> seatStatusList = seatService.findSeatsStatusByShow(showtimeId);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", seatStatusList));
         } catch (Exception e) {

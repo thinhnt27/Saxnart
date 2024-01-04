@@ -53,8 +53,7 @@ public class VNPayController {
         vnp_Params.put("vnp_ReturnUrl", VNPayConfig.vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
-//        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
-//        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         formatter.setTimeZone(TimeZone.getTimeZone("GMT+7"));
@@ -100,7 +99,6 @@ public class VNPayController {
     @GetMapping("/vnpay-payment")
     public ResponseEntity<ResponseObject> getPaymentInfor(@RequestParam(value = "vnp_Amount") String vnp_Amount,
                                                           @RequestParam(value = "vnp_BankCode") String vnp_BankCode,
-//                                                          @RequestParam(value = "vnp_BankTranNo") String vnp_BankTranNo,
                                                           @RequestParam(value = "vnp_CardType") String vnp_CardType,
                                                           @RequestParam(value = "vnp_OrderInfo") String vnp_OrderInfo,
                                                           @RequestParam(value = "vnp_PayDate") String vnp_PayDate,

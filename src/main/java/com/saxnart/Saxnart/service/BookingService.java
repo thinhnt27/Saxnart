@@ -136,6 +136,15 @@ public class BookingService {
             return "Update status booking success";
         }else  return "Booking does not exit";
     }
+
+    public String paymentSuccess(BookingDTO booking){
+        BookingEntity bookingEntity = bookingRepository.findByEmailAndShowtime_IdAndNameAndCreatedDate(booking.getEmail(),booking.getShowtimeId(), booking.getName(), booking.getCreatedDate());
+        if(bookingEntity != null){
+            bookingEntity.setIsPayment(true);
+            bookingRepository.save(bookingEntity);
+            return "Update status isPayment success";
+        }else  return "Booking does not exit";
+    }
     public String checkBookingOver15minute(BookingDTO booking) throws ParseException {
         BookingEntity bookingEntity = bookingRepository.findByEmailAndShowtime_IdAndNameAndCreatedDate(
                 booking.getEmail(), booking.getShowtimeId(), booking.getName(), booking.getCreatedDate());
