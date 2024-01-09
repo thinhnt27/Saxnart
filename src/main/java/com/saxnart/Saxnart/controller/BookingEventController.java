@@ -22,7 +22,7 @@ public class BookingEventController {
     @GetMapping
     public ResponseEntity<ResponseObject> getAllBookingEvents() {
         try {
-            List<BookingEventEntity> bookingEvents = bookingEventService.getAllContacts();
+            List<BookingEventEntity> bookingEvents = bookingEventService.getAllBookingEvents();
             return ResponseEntity.ok(new ResponseObject("ok", "Success", bookingEvents));
         }catch (Exception e) {
             e.printStackTrace();
@@ -32,7 +32,7 @@ public class BookingEventController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getFeedbackById(@PathVariable Long id) {
+    public ResponseEntity<ResponseObject> getBookingEventById(@PathVariable Long id) {
         try {
             BookingEventEntity bookingEvent = bookingEventService.getBookingEventById(id);
             return ResponseEntity.ok(new ResponseObject("ok", "Success", bookingEvent));
