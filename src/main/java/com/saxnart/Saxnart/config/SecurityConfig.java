@@ -1,9 +1,9 @@
+
 package com.saxnart.Saxnart.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,9 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
-
+import java.util.Collections;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -27,10 +25,9 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(Collections.singletonList("*"));
+        configuration.setAllowedMethods(Collections.singletonList("*"));
+        configuration.setAllowedHeaders(Collections.singletonList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -38,26 +35,36 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests()
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/demo/test").hasAnyAuthority("USER", "ADMIN")
-//                .requestMatchers("/v3/api-docs/**","/swagger-ui/**").permitAll()
-                .requestMatchers("/**").permitAll()
-//
-//                .anyRequest().authenticated();
-//        http.authenticationProvider(authenticationProvider);
-//        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http
+                .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(STATELESS)
+                .and()
                 .authorizeRequests()
-                .anyRequest()
-                .authenticated()
+                .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/api/v1/**").authenticated()
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+//        http.csrf().disable();
+//        http.cors();
+//        http.sessionManagement().sessionCreationPolicy(STATELESS);
+//        http.authorizeRequests()
+//                .requestMatchers("/api/v1/auth/**").permitAll()
+//                .requestMatchers("/**").permitAll()
+//                .and()
+//                .csrf().disable()
+//                .authorizeRequests()
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//        return http.build();
+//    }
 }

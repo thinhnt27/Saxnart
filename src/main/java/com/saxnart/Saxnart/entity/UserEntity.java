@@ -32,41 +32,26 @@ public class UserEntity implements UserDetails {
     @Column
     private String username;
 
-    @Column
-    private String email;
 
     @Column
     private String hashedpassword;
 
-    @Column
-    private String picture;
 
-    @Column
-    private  Boolean status;
-
-    @Column
-    private  Boolean isVerify;
-
-
-    @Column
-    private String reason;
+    @Column Boolean status;
 
 
     @ManyToMany
     @JsonIgnore
     @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "Users_Id"),
-            inverseJoinColumns = @JoinColumn(name = "Roles_Id"))
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
-    public UserEntity(String fullName, String username, String email, String hashedpassword, String picture, Boolean status, Boolean isVerify) {
+    public UserEntity(String fullName, String username, String hashedpassword, Boolean status) {
         this.fullName = fullName;
         this.username = username;
-        this.email = email;
         this.hashedpassword = hashedpassword;
-        this.picture = picture;
         this.status = status;
-        this.isVerify = isVerify;
     }
 
 
@@ -78,14 +63,10 @@ public class UserEntity implements UserDetails {
         return List.of(new SimpleGrantedAuthority(authorities.toString()));
     }
 
-
-
-
-    public UserEntity(Long id, String fullName, String username, String email, String hashedpassword, Set<RoleEntity> roles) {
+    public UserEntity(Long id, String fullName, String username, String hashedpassword, Set<RoleEntity> roles) {
         this.id = id;
         this.fullName = fullName;
         this.username = username;
-        this.email = email;
         this.hashedpassword = hashedpassword;
         this.roles = roles;
     }

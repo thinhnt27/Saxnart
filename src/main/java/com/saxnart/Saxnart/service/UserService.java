@@ -1,7 +1,9 @@
 package com.saxnart.Saxnart.service;
 
+import com.saxnart.Saxnart.dto.request.UserPasswordUpdateDTO;
 import com.saxnart.Saxnart.entity.RoleEntity;
 import com.saxnart.Saxnart.entity.UserEntity;
+import com.saxnart.Saxnart.extention.UserException;
 import com.saxnart.Saxnart.model.ResponseObject;
 import com.saxnart.Saxnart.repository.RoleRepository;
 import com.saxnart.Saxnart.repository.UserRepository;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -275,22 +278,20 @@ public class UserService {
 //        throw new UserException("updated failed");
 //    }
 //
-//    public void updateUserPassword(Long userId, UserPasswordUpdateDTO userPasswordUpdateDTO) {
-//
-//        Optional<UserEntity> userEntity = userRepository.findById(userId);
-//        if (userEntity.isPresent()) {
-//            if (encoder.encode(userPasswordUpdateDTO.getConfirmPassword()).equals(userEntity.get().getPassword())) {
-//                if (userPasswordUpdateDTO.getNewPassword().equals(userPasswordUpdateDTO.getConfirmPassword())) {
-//                    UserEntity user = this.getUserById(userId);
-//                    user.setHashedpassword(encoder.encode(userPasswordUpdateDTO.getNewPassword()));
-//                    userRepository.save(user);
-//                }
-//                throw new UserException("confirm password is not correct");
-//            }
-//            throw new UserException("old password is not correct ");
-//        }
-//        throw new UserException("updated failed");
-//    }
+    public void updateUserPassword(Long userId, UserPasswordUpdateDTO userPasswordUpdateDTO) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        Optional<UserEntity> userEntity = userRepository.findById(userId);
+        if (userEntity.isPresent()) {
+            String encodedPasswordFromDatabase  = userEntity.get().getPassword();
+            if (passwordEncoder.matches(userPasswordUpdateDTO.getOldPassword(),encodedPasswordFromDatabase)) {
+                if (userPasswordUpdateDTO.getNewPassword().equals(userPasswordUpdateDTO.getConfirmPassword())) {
+                    UserEntity user = this.getUserById(userId);
+                    user.setHashedpassword(encoder.encode(userPasswordUpdateDTO.getNewPassword()));
+                    userRepository.save(user);
+                }else throw new UserException("confirm password is not correct");
+            } else throw new UserException("old password is not correct ");
+        } else throw new UserException("updated failed");
+    }
 //
 //    public List<BlogPostDTO> getMarkPostByUser(Long userId) {
 //        Optional<UserEntity> userEntity = userRepository.findById(userId);

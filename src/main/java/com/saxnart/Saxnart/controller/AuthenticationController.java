@@ -5,17 +5,21 @@ import com.saxnart.Saxnart.auth.AuthenticationRequest;
 import com.saxnart.Saxnart.auth.AuthenticationResponse;
 import com.saxnart.Saxnart.auth.MessageResponse;
 import com.saxnart.Saxnart.auth.SignupRequest;
+import com.saxnart.Saxnart.dto.request.UserPasswordUpdateDTO;
 import com.saxnart.Saxnart.entity.RoleEntity;
 import com.saxnart.Saxnart.entity.UserEntity;
+import com.saxnart.Saxnart.model.ResponseObject;
 import com.saxnart.Saxnart.repository.RoleCustomRepo;
 import com.saxnart.Saxnart.repository.RoleRepository;
 import com.saxnart.Saxnart.repository.UserRepository;
 import com.saxnart.Saxnart.service.AuthenticationService;
 import com.saxnart.Saxnart.service.JwtService;
 import com.saxnart.Saxnart.service.UserService;
+import com.saxnart.Saxnart.utility.TokenChecker;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,14 +32,11 @@ import java.util.*;
 @RestController
 @RequestMapping("api/v1/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:5173", "https://fublog.tech"})
-//@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"http://localhost:3000","https://saxnartclub.com"})
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
 
-//    @Autowired
-//    CategoryCustomRepo categoryCustomRepo;
 
     @Autowired
     UserRepository userRepository;
@@ -54,143 +55,43 @@ public class AuthenticationController {
 
     @GetMapping("/getAllUser")
     public List<UserEntity> getAllUser(){
-        return  userService.getAllUser();
+        return userService.getAllUser();
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
         Optional<UserEntity> o_user = userRepository.findByUsernameAndStatusTrue(authenticationRequest.getUsername());
         if(o_user.isPresent()){
             String encodedPasswordFromDatabase  = o_user.get().getPassword();
-//            if (!userRepository.existsByUsername(authenticationRequest.getUsername()))
-//                return ResponseEntity.badRequest().body(new MessageResponse("Error: User or password are incorect"));
-//            else
                 if(!passwordEncoder.matches(authenticationRequest.getPassword(),encodedPasswordFromDatabase)){
                 return ResponseEntity.badRequest().body(new MessageResponse("Error: Username or password is wrong!"));
             }else{
                 return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
             }
         }else return ResponseEntity.badRequest().body(new MessageResponse("Error: Username or password is wrong!"));
-//        String encodedPasswordFromDatabase  = getEncodedPasswordFromDatabase(authenticationRequest.getUsername());
-        //        }else if((storedPassword != hashedPassword))
-        //        if (!userRepository.existsByUsername(authenticationRequest.getUsername())) {
-        //            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username or password is wrong!"));
-
-
     }
-
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
         }
-
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
-        }
-        if(signUpRequest.getPicture() == null){
             UserEntity user = new UserEntity(signUpRequest.getFullName(),
                     signUpRequest.getUsername(),
-                    signUpRequest.getEmail(),
                     encoder.encode(signUpRequest.getPassword()),
-                    "https://firebasestorage.googleapis.com/v0/b/fublog-6a7cf.appspot.com/o/files%2Fdefault-avatar.png?alt=media&token=876d6a33-39a1-4d03-a81c-cd291144fdef&_gl=1*1allgyf*_ga*MTYyODg2MDg2MC4xNjg0Njg2NjQy*_ga_CW55HF8NVT*MTY5Njk0MzI1My4xMDMuMS4xNjk2OTQzMzk0LjM2LjAuMA&fbclid=IwAR3D93i-DgqUvJPJkuAe0eoNEJV6atVqChekdobAkufvqDgN4qDinZQxoiM",
-                    true,
-                    true
-            );
-
+                    true);
             Set<RoleEntity> roleEntities = new HashSet<>();
-            RoleEntity userRole = roleRepository.findByName("USER");
+            RoleEntity userRole = roleRepository.findByName("ADMIN");
             roleEntities.add(userRole);
             user.setRoles(roleEntities);
-
             userRepository.save(user);
-        }else{
-            UserEntity user = new UserEntity(signUpRequest.getFullName(),
-                    signUpRequest.getUsername(),
-                    signUpRequest.getEmail(),
-                    encoder.encode(signUpRequest.getPassword()),
-                    signUpRequest.getPicture(),
-                    true,
-                    true
-            );
-
-            Set<RoleEntity> roleEntities = new HashSet<>();
-            RoleEntity userRole = roleRepository.findByName("USER");
-            roleEntities.add(userRole);
-            user.setRoles(roleEntities);
-
-            userRepository.save(user);
-        }
-
         AuthenticationRequest authenticationRequest = new AuthenticationRequest(signUpRequest.getUsername(), signUpRequest.getPassword());
         return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
     }
 
-    @PostMapping("google")
-    public ResponseEntity<?> loginGoogle(@Valid @RequestBody SignupRequest signUpRequest) {
-
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        Optional<UserEntity> o_user = userRepository.findByUsernameAndStatusTrue(signUpRequest.getEmail());
-        if (o_user.isPresent()) {
-            String encodedPasswordFromDatabase = o_user.get().getPassword();
-            if (!passwordEncoder.matches(signUpRequest.getPassword(), encodedPasswordFromDatabase)) {
-                return ResponseEntity.badRequest().body(new MessageResponse("Error: Username or password is wrong!"));
-            } else {
-                AuthenticationRequest authenticationRequest = new AuthenticationRequest(signUpRequest.getEmail(), signUpRequest.getPassword());
-                return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
-            }
-        }
-        UserEntity user = new UserEntity(signUpRequest.getFullName(),
-                signUpRequest.getEmail(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()),
-                signUpRequest.getPicture(),
-                true,
-                true
-        );
-        Set<RoleEntity> roleEntities = new HashSet<>();
-        RoleEntity userRole = roleRepository.findByName("USER");
-        roleEntities.add(userRole);
-        user.setRoles(roleEntities);
-        userRepository.save(user);
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest(signUpRequest.getEmail(), signUpRequest.getPassword());
-        return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
-    }
-
-//    @GetMapping("/getUserInfo")
-//    public UserDTO InfoUser(@RequestHeader("Authorization") String token) {
-//
-//        String username = jwtService.extractTokenToGetUser(token.substring(7));
-//        List <String> roles = jwtService.extractTokenToGetRoles(token.substring(7));
-//        Optional<UserEntity> user = userRepository.findByUsernameAndStatusTrue(username);
-////        AuthenticationReponse authenticationReponse = new AuthenticationReponse();
-////        authenticationReponse.setFullname(user.get().getFullName());
-////        authenticationReponse.setPicture(user.get().getPicture());
-////        authenticationReponse.setEmail(user.get().getEmail());
-////        authenticationReponse.setId(user.get().getId());
-////        authenticationReponse.setPassword(user.get().getHashedpassword());
-//
-////        return authenticationReponse;
-//        UserDTO userDTO = new UserDTO();
-//        userDTO.setFullName(user.get().getFullName());
-//        userDTO.setPicture(user.get().getPicture());
-//        userDTO.setEmail(user.get().getEmail());
-//        userDTO.setId(user.get().getId());
-//        userDTO.setPassword(user.get().getHashedpassword());
-//        userDTO.setRoles(roles);
-//        userDTO.setUsername(user.get().getUsername());
-//
-////        userDTO.setCategories();
-//        return userDTO;
-//
-//    }
     @GetMapping("/refreshToken")
     public ResponseEntity<?> getNewToken(@RequestHeader("Authorization") String refreshToken) {
         String username = jwtService.extractTokenToGetUser(refreshToken.substring(7));
-//        Optional<UserEntity> user = userRepository.findByUsername(username);
         if (username != null) {
             UserEntity user = userRepository.findByUsernameAndStatusTrue(username).orElseThrow();
             List<RoleEntity> role = null;
@@ -203,15 +104,35 @@ public class AuthenticationController {
             user.setRoles(set);
             set.stream().forEach(i -> authorities.add(new SimpleGrantedAuthority(i.getName())));
             var jwtToken = jwtService.generateToken(user, authorities);
-//            var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
             AuthenticationResponse authenticationResponse = new AuthenticationResponse();
             authenticationResponse.setToken(jwtToken);
             authenticationResponse.setRefreshToken(refreshToken.substring(7));
-//            System.out.println(authenticationReponse);
             return ResponseEntity.ok(authenticationResponse);
         }
         return ResponseEntity.badRequest().body(new MessageResponse("Can not have new token!!!"));
+    }
 
+    @PatchMapping("/updateUserPassword/{userId}")
+    public ResponseEntity<ResponseObject> updateUserPassword(@RequestHeader("Authorization") String token,
+                                                             @PathVariable Long userId,
+                                                             @RequestBody UserPasswordUpdateDTO userPasswordUpdateDTO) {
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseObject("failed", "User ID cannot be null", ""));
+        }
+        try {
+            if (TokenChecker.checkToken(token)) {
+                userService.updateUserPassword(userId, userPasswordUpdateDTO);
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("ok", "found", ""));
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseObject("failed", "not found", ""));
+        } catch (RuntimeException ex) {
+            System.out.println(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseObject("failed", ex.getMessage(), ""));
+        }
     }
 //   @GetMapping("/logout")
 //public ResponseEntity<String> logout(@RequestHeader("Authorization") String authorizationHeader) {
