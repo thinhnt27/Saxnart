@@ -1,5 +1,6 @@
 package com.saxnart.Saxnart.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -34,9 +35,8 @@ public class FeedbackEntity {
     private String content;
 
     @Column
-    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private Date createdDate;
 
     @Column
