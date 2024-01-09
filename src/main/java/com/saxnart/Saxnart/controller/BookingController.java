@@ -46,7 +46,7 @@ public class BookingController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.getAllBookingByShow(showtimeId)));
         }catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking", ""));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking by showId", ""));
         }
     }
     @GetMapping("/getAllBookingSeatNum/{showtimeId}")
@@ -54,7 +54,7 @@ public class BookingController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.getAllBookingSeatNumByShow(showtimeId)));
         }catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking", ""));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking seat by showId", ""));
         }
     }
 
@@ -63,7 +63,7 @@ public class BookingController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.checkSeatStatusInShow(showtimeId, seatNum)));
         }catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking", ""));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error check all booking by showId", ""));
         }
     }
 
@@ -75,7 +75,7 @@ public class BookingController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error get all booking", ""));
+                    .body(new ResponseObject("error", "Error get cancel", ""));
         }
     }
 
@@ -87,7 +87,7 @@ public class BookingController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error get all booking", ""));
+                    .body(new ResponseObject("error", "Error check booking", ""));
         }
     }
 
@@ -99,7 +99,7 @@ public class BookingController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error get all booking", ""));
+                    .body(new ResponseObject("error", "Error update isPayment", ""));
         }
     }
 }
