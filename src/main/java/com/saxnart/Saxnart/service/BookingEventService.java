@@ -16,7 +16,7 @@ public class BookingEventService {
 
     @Autowired
     private BookingEventRepository bookingEventRepository;
-    public List<BookingEventEntity> getAllContacts(){
+    public List<BookingEventEntity> getAllBookingEvents(){
         return bookingEventRepository.findAll();
     }
 
