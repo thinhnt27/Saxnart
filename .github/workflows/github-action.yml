@@ -3,10 +3,10 @@ name: ci
 on:
   push:
     branches:
-        - 'publish-docker'
+        - 'main'
   pull_request:
     branches:
-        - 'publish-docker'
+        - 'main'
 
 jobs:
   docker:
