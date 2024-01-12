@@ -59,8 +59,8 @@ public class BlogController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteBlog(@PathVariable Long id) {
         try {
-            String savedBlogEntity = blogService.deleteBlog(id);
-            return ResponseEntity.ok(new ResponseObject("ok", savedBlogEntity, ""));
+            String deleteBlogEntity = blogService.deleteBlog(id);
+            return ResponseEntity.ok(new ResponseObject("ok", deleteBlogEntity, ""));
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

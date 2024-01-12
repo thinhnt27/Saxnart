@@ -58,8 +58,8 @@ public class ChuyenNgheSiController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteChuyenNgheSi(@PathVariable Long id) {
         try {
-            String savedChuyenNgheSiEntity = chuyenNgheSiService.deleteChuyenNgheSi(id);
-            return ResponseEntity.ok(new ResponseObject("ok", savedChuyenNgheSiEntity, ""));
+            String deleteChuyenNgheSiEntity = chuyenNgheSiService.deleteChuyenNgheSi(id);
+            return ResponseEntity.ok(new ResponseObject("ok", deleteChuyenNgheSiEntity, ""));
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
