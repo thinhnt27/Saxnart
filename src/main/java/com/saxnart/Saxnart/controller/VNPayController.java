@@ -144,7 +144,7 @@ public class VNPayController {
 
     }
 
-    private void encodeAndPut (Map < String, String > fields, String paramName, String paramValue)
+    private void encodeAndPut(Map < String, String > fields, String paramName, String paramValue)
             throws UnsupportedEncodingException {
             String encodedName = URLEncoder.encode(paramName, StandardCharsets.US_ASCII.toString());
             String encodedValue = URLEncoder.encode(paramValue, StandardCharsets.US_ASCII.toString());

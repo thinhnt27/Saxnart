@@ -21,7 +21,7 @@ public class GalleryEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column
+    @Column(columnDefinition = "LONGTEXT")
     private String image;
 
     @Column
