@@ -59,17 +59,22 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest){
+    public ResponseEntity<ResponseObject> login(@RequestBody AuthenticationRequest authenticationRequest){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Optional<UserEntity> o_user = userRepository.findByUsernameAndStatusTrue(authenticationRequest.getUsername());
         if(o_user.isPresent()){
             String encodedPasswordFromDatabase  = o_user.get().getPassword();
                 if(!passwordEncoder.matches(authenticationRequest.getPassword(),encodedPasswordFromDatabase)){
-                return ResponseEntity.badRequest().body(new MessageResponse("Error: Username or password is wrong!"));
+                return ResponseEntity.status(HttpStatus.OK)
+                            .body(new ResponseObject("error", "Username or password is wrong!", ""));
             }else{
-                return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
+                return ResponseEntity.status(HttpStatus.OK)
+                            .body(new ResponseObject("ok", "Login Success!", authenticationService.authenticate(authenticationRequest)));
             }
-        }else return ResponseEntity.badRequest().body(new MessageResponse("Error: Username or password is wrong!"));
+        }else
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("error", "Username or password is wrong!", ""));
+
     }
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {

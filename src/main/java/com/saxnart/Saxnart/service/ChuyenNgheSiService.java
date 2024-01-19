@@ -2,11 +2,13 @@ package com.saxnart.Saxnart.service;
 
 
 import com.saxnart.Saxnart.entity.ChuyenNgheSiEntity;
+import com.saxnart.Saxnart.extention.ChuyenNgheSixException;
 import com.saxnart.Saxnart.repository.ChuyenNgheSiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChuyenNgheSiService {
@@ -36,12 +38,28 @@ public class ChuyenNgheSiService {
 
     public String updateStatus(Long id) {
         ChuyenNgheSiEntity chuyenNgheSi = chuyenNgheSiRepository.findById(id).orElse(null);
+
         if (chuyenNgheSi != null) {
             chuyenNgheSi.setStatus(false);
             chuyenNgheSiRepository.save(chuyenNgheSi);
             return "Update thành công";
         }
         return "Không tìm thấy";
+    }
+
+    public ChuyenNgheSiEntity update(Long Id, ChuyenNgheSiEntity chuyenNgheSiEntity){
+        Optional<ChuyenNgheSiEntity> chuyenNgheSi = chuyenNgheSiRepository.findById(Id);
+        if (chuyenNgheSi.isPresent()){
+            ChuyenNgheSiEntity ngheSi = this.getChuyenNgheSiById(Id);
+            ngheSi.setTitle(chuyenNgheSiEntity.getTitle());
+            ngheSi.setAuthor(chuyenNgheSiEntity.getAuthor());
+            ngheSi.setContent(chuyenNgheSiEntity.getContent());
+            ngheSi.setCreateDate(chuyenNgheSiEntity.getCreateDate());
+            ngheSi.setStatus(chuyenNgheSiEntity.getStatus());
+            chuyenNgheSiRepository.save(ngheSi);
+            return ngheSi;
+        }
+        throw new ChuyenNgheSixException("updated failed");
     }
 
 }

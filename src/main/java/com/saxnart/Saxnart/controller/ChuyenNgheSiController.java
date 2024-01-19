@@ -78,4 +78,19 @@ public class ChuyenNgheSiController {
                     .body(new ResponseObject("error", "Error update chuyen nghe si", ""));
         }
     }
+
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<ResponseObject> updatep(@PathVariable Long id, @RequestBody ChuyenNgheSiEntity chuyenNgheSiEntity) {
+        try {
+            if(id.equals(chuyenNgheSiEntity.getId())){
+                ChuyenNgheSiEntity updatedChuyenNgheSi = chuyenNgheSiService.update(id,chuyenNgheSiEntity);
+                return ResponseEntity.ok(new ResponseObject("ok", "update success", updatedChuyenNgheSi));
+            }else return ResponseEntity.ok(new ResponseObject("ok", "Id không khớp", ""));
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error update chuyen nghe si", ""));
+        }
+    }
 }
