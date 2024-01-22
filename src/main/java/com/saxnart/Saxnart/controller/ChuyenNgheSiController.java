@@ -58,8 +58,8 @@ public class ChuyenNgheSiController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteChuyenNgheSi(@PathVariable Long id) {
         try {
-            String savedChuyenNgheSiEntity = chuyenNgheSiService.deleteChuyenNgheSi(id);
-            return ResponseEntity.ok(new ResponseObject("ok", savedChuyenNgheSiEntity, ""));
+            String deleteChuyenNgheSiEntity = chuyenNgheSiService.deleteChuyenNgheSi(id);
+            return ResponseEntity.ok(new ResponseObject("ok", deleteChuyenNgheSiEntity, ""));
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -72,6 +72,21 @@ public class ChuyenNgheSiController {
         try {
             String updatedChuyenNgheSi = chuyenNgheSiService.updateStatus(id);
             return ResponseEntity.ok(new ResponseObject("ok", updatedChuyenNgheSi, ""));
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error update chuyen nghe si", ""));
+        }
+    }
+
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<ResponseObject> updatep(@PathVariable Long id, @RequestBody ChuyenNgheSiEntity chuyenNgheSiEntity) {
+        try {
+            if(id.equals(chuyenNgheSiEntity.getId())){
+                ChuyenNgheSiEntity updatedChuyenNgheSi = chuyenNgheSiService.update(id,chuyenNgheSiEntity);
+                return ResponseEntity.ok(new ResponseObject("ok", "update success", updatedChuyenNgheSi));
+            }else return ResponseEntity.ok(new ResponseObject("ok", "Id không khớp", ""));
+
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

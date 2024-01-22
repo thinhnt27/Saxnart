@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -15,8 +14,8 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "chuyen_nghe_si")
-public class ChuyenNgheSiEntity {
+@Table(name = "Event")
+public class EventEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -25,15 +24,13 @@ public class ChuyenNgheSiEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "author", nullable = false)
-    private String author;
+    @Column
+    private String showTimeDate;
 
-    @Column(name = "create_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private Date createDate = new Date(System.currentTimeMillis() + (7 * 60 * 60 * 1000));
+    @Column(columnDefinition = "LONGTEXT")
+    private String image;
 
-    @Column(name = "content", columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
 
     @Column(name = "status")
