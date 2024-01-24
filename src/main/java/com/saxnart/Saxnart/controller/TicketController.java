@@ -57,7 +57,7 @@ public class TicketController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<ResponseObject> updateTicketType(@PathVariable Long id, @RequestBody TicketTypeEntity updatedTicketType) {
         try{
             if(id.equals(updatedTicketType.getId())){
