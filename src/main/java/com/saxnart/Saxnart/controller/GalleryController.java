@@ -57,4 +57,16 @@ public class GalleryController {
                     .body(new ResponseObject("error", "Error delete chuyen nghe si", ""));
         }
     }
+
+    @PatchMapping("/updateStatus/{id}")
+    public ResponseEntity<ResponseObject> updateStatus(@PathVariable Long id) {
+        try {
+            String updatedGallery = galleryService.updateStatus(id);
+            return ResponseEntity.ok(new ResponseObject("ok", updatedGallery, ""));
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error update gallery", ""));
+        }
+    }
 }

@@ -28,4 +28,7 @@ public class GalleryEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private Date createDate;
+
+    @Column
+    private Boolean status;
 }
