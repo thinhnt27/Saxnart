@@ -1,5 +1,6 @@
 package com.saxnart.Saxnart.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,6 +35,7 @@ public class TicketTypeEntity {
     private int weekendPrice;
 
     @OneToMany(mappedBy = "ticketType")
+    @JsonIgnore
     private Set<BookingDetailEntity> ticketBookingDetails = new HashSet<>();
 
     @Override

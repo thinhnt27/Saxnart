@@ -40,7 +40,7 @@ public class ChuyenNgheSiService {
         ChuyenNgheSiEntity chuyenNgheSi = chuyenNgheSiRepository.findById(id).orElse(null);
 
         if (chuyenNgheSi != null) {
-            chuyenNgheSi.setStatus(false);
+            chuyenNgheSi.setStatus(!chuyenNgheSi.getStatus());
             chuyenNgheSiRepository.save(chuyenNgheSi);
             return "Update thành công";
         }

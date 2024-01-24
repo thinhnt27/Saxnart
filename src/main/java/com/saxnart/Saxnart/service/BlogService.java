@@ -38,7 +38,7 @@ public class BlogService {
     public String updateStatus(Long id) {
         BlogEntity blogEntity = blogRepository.findById(id).orElse(null);
         if (blogEntity != null) {
-            blogEntity.setStatus(false);
+            blogEntity.setStatus(!blogEntity.getStatus());
             blogRepository.save(blogEntity);
             return "Update thành công";
         }
