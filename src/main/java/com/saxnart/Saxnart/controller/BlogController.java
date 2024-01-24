@@ -79,4 +79,19 @@ public class BlogController {
                     .body(new ResponseObject("error", "Error update blog", ""));
         }
     }
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<ResponseObject> update(@PathVariable Long id, @RequestBody BlogEntity blogEntity) {
+        try {
+            if(id.equals(blogEntity.getId())){
+                BlogEntity updatedBlog = blogService.update(id,blogEntity);
+                return ResponseEntity.ok(new ResponseObject("ok", "update success", updatedBlog));
+            }else return ResponseEntity.ok(new ResponseObject("ok", "Id không khớp", ""));
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error update chuyen nghe si", ""));
+        }
+    }
+
 }
