@@ -54,6 +54,7 @@ public class EventService {
         Optional<EventEntity> event = eventRepository.findById(Id);
         if (event.isPresent()){
             EventEntity entity = this.getEventById(Id);
+            entity.setShowTimeDate(eventEntity.getShowTimeDate());
             entity.setTitle(eventEntity.getTitle());
             entity.setImage(eventEntity.getImage());
             entity.setContent(eventEntity.getContent());
