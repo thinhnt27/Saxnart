@@ -38,6 +38,8 @@ public class BookingEventEntity {
     private Date createdDate;
 
     @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
     private Date eventDate;
 
     @Column
