@@ -4,6 +4,7 @@ package com.saxnart.Saxnart.service;
 import com.saxnart.Saxnart.entity.ChuyenNgheSiEntity;
 import com.saxnart.Saxnart.extention.ChuyenNgheSixException;
 import com.saxnart.Saxnart.repository.ChuyenNgheSiRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,19 +48,20 @@ public class ChuyenNgheSiService {
         return "Không tìm thấy";
     }
 
-    public ChuyenNgheSiEntity update(Long Id, ChuyenNgheSiEntity chuyenNgheSiEntity){
-        Optional<ChuyenNgheSiEntity> chuyenNgheSi = chuyenNgheSiRepository.findById(Id);
-        if (chuyenNgheSi.isPresent()){
-            ChuyenNgheSiEntity ngheSi = this.getChuyenNgheSiById(Id);
-            ngheSi.setTitle(chuyenNgheSiEntity.getTitle());
-            ngheSi.setAuthor(chuyenNgheSiEntity.getAuthor());
-            ngheSi.setContent(chuyenNgheSiEntity.getContent());
-            ngheSi.setCreateDate(chuyenNgheSiEntity.getCreateDate());
-            ngheSi.setStatus(chuyenNgheSiEntity.getStatus());
-            chuyenNgheSiRepository.save(ngheSi);
-            return ngheSi;
+    public ChuyenNgheSiEntity update(Long id, ChuyenNgheSiEntity updatedChuyenNgheSi) {
+        Optional<ChuyenNgheSiEntity> existingChuyenNgheSiOptional = chuyenNgheSiRepository.findById(id);
+
+        if (existingChuyenNgheSiOptional.isPresent()) {
+            ChuyenNgheSiEntity existingChuyenNgheSi = existingChuyenNgheSiOptional.get();
+            ModelMapper modelMapper = new ModelMapper();
+            modelMapper.getConfiguration().setSkipNullEnabled(true);
+            modelMapper.map(updatedChuyenNgheSi, existingChuyenNgheSi);
+
+            chuyenNgheSiRepository.save(existingChuyenNgheSi);
+            return existingChuyenNgheSi;
+        } else {
+            throw new ChuyenNgheSixException("ChuyenNgheSi not found");
         }
-        throw new ChuyenNgheSixException("updated failed");
     }
 
 }

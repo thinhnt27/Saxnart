@@ -7,6 +7,7 @@ import com.saxnart.Saxnart.entity.GalleryEntity;
 import com.saxnart.Saxnart.extention.ChuyenNgheSixException;
 import com.saxnart.Saxnart.extention.EventException;
 import com.saxnart.Saxnart.repository.EventRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,18 +51,19 @@ public class EventService {
         }
     }
 
-    public EventEntity update(Long Id, EventEntity eventEntity){
-        Optional<EventEntity> event = eventRepository.findById(Id);
-        if (event.isPresent()){
-            EventEntity entity = this.getEventById(Id);
-            entity.setShowTimeDate(eventEntity.getShowTimeDate());
-            entity.setTitle(eventEntity.getTitle());
-            entity.setImage(eventEntity.getImage());
-            entity.setContent(eventEntity.getContent());
-            entity.setStatus(eventEntity.getStatus());
-            eventRepository.save(entity);
-            return entity;
+    public EventEntity update(Long id, EventEntity updatedEvent) {
+        Optional<EventEntity> existingEventOptional = eventRepository.findById(id);
+
+        if (existingEventOptional.isPresent()) {
+            EventEntity existingEvent = existingEventOptional.get();
+            ModelMapper modelMapper = new ModelMapper();
+            modelMapper.getConfiguration().setSkipNullEnabled(true);
+            modelMapper.map(updatedEvent, existingEvent);
+
+            eventRepository.save(existingEvent);
+            return existingEvent;
+        } else {
+            throw new EventException("Event not found");
         }
-        throw new EventException("updated failed");
     }
 }

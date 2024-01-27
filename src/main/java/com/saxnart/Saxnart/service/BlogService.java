@@ -2,8 +2,10 @@ package com.saxnart.Saxnart.service;
 
 import com.saxnart.Saxnart.entity.BlogEntity;
 import com.saxnart.Saxnart.entity.ChuyenNgheSiEntity;
+import com.saxnart.Saxnart.extention.BlogException;
 import com.saxnart.Saxnart.extention.ChuyenNgheSixException;
 import com.saxnart.Saxnart.repository.BlogRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,18 +49,19 @@ public class BlogService {
         return "Không tìm thấy";
     }
 
-    public BlogEntity update(Long Id, BlogEntity blogEntity){
-        Optional<BlogEntity> blog = blogRepository.findById(Id);
-        if (blog.isPresent()){
-            BlogEntity entity = this.getBlogById(Id);
-            entity.setTitle(blogEntity.getTitle());
-            entity.setAuthor(blogEntity.getAuthor());
-            entity.setContent(blogEntity.getContent());
-            entity.setCreateDate(blogEntity.getCreateDate());
-            entity.setStatus(blogEntity.getStatus());
-            blogRepository.save(entity);
-            return entity;
+    public BlogEntity update(Long id, BlogEntity updatedBlog) {
+        Optional<BlogEntity> existingBlogOptional = blogRepository.findById(id);
+
+        if (existingBlogOptional.isPresent()) {
+            BlogEntity existingBlog = existingBlogOptional.get();
+            ModelMapper modelMapper = new ModelMapper();
+            modelMapper.getConfiguration().setSkipNullEnabled(true);
+            modelMapper.map(updatedBlog, existingBlog);
+
+            blogRepository.save(existingBlog);
+            return existingBlog;
+        } else {
+            throw new BlogException("Blog not found");
         }
-        throw new ChuyenNgheSixException("updated failed");
     }
 }
