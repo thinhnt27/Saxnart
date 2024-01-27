@@ -1,10 +1,7 @@
 package com.saxnart.Saxnart.service;
 
-import com.saxnart.Saxnart.entity.BlogEntity;
-import com.saxnart.Saxnart.entity.ChuyenNgheSiEntity;
+
 import com.saxnart.Saxnart.entity.EventEntity;
-import com.saxnart.Saxnart.entity.GalleryEntity;
-import com.saxnart.Saxnart.extention.ChuyenNgheSixException;
 import com.saxnart.Saxnart.extention.EventException;
 import com.saxnart.Saxnart.repository.EventRepository;
 import org.modelmapper.ModelMapper;
