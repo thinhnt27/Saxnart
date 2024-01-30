@@ -54,7 +54,7 @@ public class EventController {
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error create chuyen nghe si", ""));
+                    .body(new ResponseObject("error", "Error create event", ""));
         }
     }
 

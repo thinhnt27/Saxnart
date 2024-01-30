@@ -52,7 +52,7 @@ public class BlogController {
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error create chuyen nghe si", ""));
+                    .body(new ResponseObject("error", "Error create blog", ""));
         }
     }
 
@@ -90,7 +90,7 @@ public class BlogController {
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error update chuyen nghe si", ""));
+                    .body(new ResponseObject("error", "Error update blog", ""));
         }
     }
 
