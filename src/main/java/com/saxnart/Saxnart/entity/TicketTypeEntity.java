@@ -50,4 +50,8 @@ public class TicketTypeEntity {
         TicketTypeEntity ticketType = (TicketTypeEntity) obj;
         return Objects.equals(id, ticketType.getId());
     }
+
+
+
+
 }

@@ -46,8 +46,13 @@ public class ShowEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
+    @Column(columnDefinition = "LONGTEXT")
+    private String image;
+
     @OneToMany(mappedBy = "showtime")
     @JsonIgnore
     private Set<BookingEntity> bookings = new HashSet<>();
+
+
 
 }

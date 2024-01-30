@@ -2,6 +2,7 @@ package com.saxnart.Saxnart.controller;
 
 
 import com.saxnart.Saxnart.dto.TicketDTO;
+import com.saxnart.Saxnart.dto.response.ShowDTO;
 import com.saxnart.Saxnart.entity.ShowEntity;
 import com.saxnart.Saxnart.model.ResponseObject;
 import com.saxnart.Saxnart.service.ShowService;
@@ -39,7 +40,7 @@ public class ShowController {
     @GetMapping("/getShowsSpecialTrue")
     public ResponseEntity<ResponseObject> getShowsBySpecialTrue() {
         try {
-            List<ShowEntity> allShow = showService.getShowHaveSpecialIsTrue();
+            List<ShowDTO> allShow = showService.getShowDTOHaveSpecialIsTrue();
             return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
         } catch (Exception e) {
             e.printStackTrace();
