@@ -6,6 +6,7 @@ import com.saxnart.Saxnart.entity.ShowEntity;
 import com.saxnart.Saxnart.entity.TicketTypeEntity;
 import com.saxnart.Saxnart.repository.ShowRepository;
 import com.saxnart.Saxnart.repository.TicketTypeRepository;
+import com.saxnart.Saxnart.utility.ConvertDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,57 +32,33 @@ public class ShowService {
         List<ShowEntity> shows = showRepository.findAll();
         return shows;
     }
+
+    public List<ShowDTO> getAllShowDTO(){
+        List<ShowEntity> shows = showRepository.findAll();
+        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
+        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
+        return showDTOs;
+    }
     public List<ShowEntity> getShowHaveSpecialIsTrue(){
         return showRepository.findByIsSpecialIsTrue();
     }
     public List<ShowDTO> getShowDTOHaveSpecialIsTrue(){
         List<ShowEntity> shows = showRepository.findByIsSpecialIsTrue();
         List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
-        List<ShowDTO> showDTOs = shows.stream()
-                .map(show -> {
-                    List<TicketDTO> ticketDTOS = new ArrayList<>();
-                    for (TicketTypeEntity ticket: tickets) {
-                        TicketDTO ticketTypeDTO = new TicketDTO();
-                        if(isWeekend(show.getShowDate()) && !show.getIsSpecial()){
-                            ticketTypeDTO.setId(ticket.getId());
-                            ticketTypeDTO.setName(ticket.getName());
-                            ticketTypeDTO.setWeekendPrice(ticket.getWeekendPrice());
-                        }else if(!isWeekend(show.getShowDate()) && !show.getIsSpecial()){
-                            ticketTypeDTO.setId(ticket.getId());
-                            ticketTypeDTO.setName(ticket.getName());
-                            ticketTypeDTO.setWeekdayPrice(ticket.getWeekdayPrice());
-                        }else {
-                            ticketTypeDTO.setId(ticket.getId());
-                            ticketTypeDTO.setName(ticket.getName());
-                            ticketTypeDTO.setPriceInternational(ticket.getPriceInternational());
-                        }
-                        ticketDTOS.add(ticketTypeDTO);
-                    }
-                    return new ShowDTO(
-                            show.getId(),
-                            show.getTitle(),
-                            show.getShowDate(),
-                            show.getPicture(),
-                            show.getAuthor(),
-                            show.getIsSpecial(),
-                            show.getContent(),
-                            show.getImage(),
-                            ticketDTOS
-                    );
-                })
-                .toList();
+        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
         return showDTOs;
     }
 
-    private boolean isWeekend(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        return dayOfWeek == Calendar.THURSDAY || dayOfWeek == Calendar.FRIDAY || dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY;
-    }
 
     public List<ShowEntity> getShowHaveSpecialIsFalse(){
         return showRepository.findByIsSpecialIsFalse();
+    }
+
+    public List<ShowDTO> getShowDTOHaveSpecialIsFalse(){
+        List<ShowEntity> shows = showRepository.findByIsSpecialIsFalse();
+        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
+        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
+        return showDTOs;
     }
 
     public void creatShow(ShowEntity showEntity){
@@ -92,11 +69,32 @@ public class ShowService {
         return showRepository.findSpecialTrueShowsAfterCurrentDate(currentDate);
     }
 
+    public List<ShowDTO> findShowsDTOAfterDateAndSpecialIsTrue(Date currentDate) {
+        List<ShowEntity> shows = showRepository.findSpecialTrueShowsAfterCurrentDate(currentDate);
+        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
+        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
+        return showDTOs;
+    }
+
     public List<ShowEntity> findShowsAfterDateAndSpecialIsFalse(Date currentDate) {
         return showRepository.findSpecialFalseShowsAfterCurrentDate(currentDate);
     }
 
+    public List<ShowDTO> findShowsDTOAfterDateAndSpecialIsFalse(Date currentDate) {
+        List<ShowEntity> shows = showRepository.findSpecialFalseShowsAfterCurrentDate(currentDate);
+        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
+        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
+        return showDTOs;
+    }
+
     public List<ShowEntity> findShowsAfterDate(Date currentDate) {
         return showRepository.findShowsAfterCurrentDate(currentDate);
+    }
+
+    public List<ShowDTO> findShowsDTOAfterDate(Date currentDate) {
+        List<ShowEntity> shows = showRepository.findShowsAfterCurrentDate(currentDate);
+        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
+        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
+        return showDTOs;
     }
 }
