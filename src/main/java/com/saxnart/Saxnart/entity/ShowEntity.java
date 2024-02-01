@@ -46,8 +46,20 @@ public class ShowEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
-    @Column(columnDefinition = "LONGTEXT")
-    private String image;
+    @Column
+    private Long priceHiend;
+
+    @Column
+    private Long priceCigarBar;
+
+    @Column
+    private Long priceStage;
+
+    @Column
+    private Long priceJazzLover;
+
+    @Column
+    private Long priceCocktailBar;
 
     @OneToMany(mappedBy = "showtime")
     @JsonIgnore

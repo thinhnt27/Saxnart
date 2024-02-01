@@ -114,7 +114,7 @@ public class ConvertDTO {
                 show.getAuthor(),
                 show.getIsSpecial(),
                 show.getContent(),
-                show.getImage(),
+                show.getPicture(),
                 ticketDTOs
         );
     }
