@@ -13,7 +13,6 @@ public class TicketDTO {
 
     private Long id;
     private String name;
-    private double priceInternational;
-    private double weekdayPrice;
-    private double weekendPrice;
+    private int price;
+
 }

@@ -19,43 +19,47 @@ public class TicketTypeService {
         return ticketTypeRepository.findById(id).orElse(null);
     }
 
-    public List<TicketDTO> getAllTicket(){
-        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
-        List<TicketDTO> ticketDTOs = new ArrayList<>();
-
-        for (TicketTypeEntity ticket : tickets) {
-            TicketDTO ticketDTO = new TicketDTO();
-            ticketDTO.setId(ticket.getId());
-            ticketDTO.setName(ticket.getName());
-            ticketDTO.setPriceInternational(ticket.getPriceInternational());
-            ticketDTO.setWeekdayPrice(ticket.getWeekdayPrice());
-            ticketDTO.setWeekendPrice(ticket.getWeekendPrice());
-
-            ticketDTOs.add(ticketDTO);
-        }
-
-        return ticketDTOs;
+    public List<TicketTypeEntity> findByShowtimeId(Long id) {
+        return ticketTypeRepository.findByShowtime_Id(id);
     }
+//    public List<TicketDTO> getAllTicket(){
+//        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
+//        List<TicketDTO> ticketDTOs = new ArrayList<>();
+//
+//        for (TicketTypeEntity ticket : tickets) {
+//            TicketDTO ticketDTO = new TicketDTO();
+//            ticketDTO.setId(ticket.getId());
+//            ticketDTO.setName(ticket.getName());
+//            ticketDTO.setPriceInternational(ticket.getPriceInternational());
+//            ticketDTO.setWeekdayPrice(ticket.getWeekdayPrice());
+//            ticketDTO.setWeekendPrice(ticket.getWeekendPrice());
+//            ticketDTOs.add(ticketDTO);
+//        }
+//        return ticketDTOs;
+//    }
+
+
     public TicketTypeEntity getTicketTypeById(Long id) {
         return ticketTypeRepository.findById(id)
                 .orElseThrow(() -> new TickerTypeException("TicketType not found with id: " + id));
     }
 
     public TicketTypeEntity createTicketType(TicketTypeEntity ticketType) {
+
         return ticketTypeRepository.save(ticketType);
     }
 
-    public TicketTypeEntity updateTicketType(Long id, TicketTypeEntity updatedTicketType) {
-        TicketTypeEntity existingTicketType = getTicketTypeById(id);
-        // Perform update logic here
-        existingTicketType.setName(updatedTicketType.getName());
-        existingTicketType.setPriceInternational(updatedTicketType.getPriceInternational());
-        existingTicketType.setWeekdayPrice(updatedTicketType.getWeekdayPrice());
-        existingTicketType.setWeekendPrice(updatedTicketType.getWeekendPrice());
-        // Update other fields as needed
-
-        return ticketTypeRepository.save(existingTicketType);
-    }
+//    public TicketTypeEntity updateTicketType(Long id, TicketTypeEntity updatedTicketType) {
+//        TicketTypeEntity existingTicketType = getTicketTypeById(id);
+//        // Perform update logic here
+//        existingTicketType.setName(updatedTicketType.getName());
+//        existingTicketType.setPriceInternational(updatedTicketType.getPriceInternational());
+//        existingTicketType.setWeekdayPrice(updatedTicketType.getWeekdayPrice());
+//        existingTicketType.setWeekendPrice(updatedTicketType.getWeekendPrice());
+//        // Update other fields as needed
+//
+//        return ticketTypeRepository.save(existingTicketType);
+//    }
 
     public String deleteTicketType(Long id) {
         if (ticketTypeRepository.existsById(id)) {

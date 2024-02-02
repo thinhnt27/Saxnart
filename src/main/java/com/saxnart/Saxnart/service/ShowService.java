@@ -28,40 +28,48 @@ public class ShowService {
     public ShowEntity findById(Long id) {
         return showRepository.findById(id).orElse(null);
     }
-    public List<ShowEntity> getAllShow() {
-        List<ShowEntity> shows = showRepository.findAll();
-        return shows;
-    }
 
-    public List<ShowDTO> getAllShowDTO(){
+    public List<ShowDTO> getAllShow() {
         List<ShowEntity> shows = showRepository.findAll();
-        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
-        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
+        List<ShowDTO> showDTOs = ConvertDTO.convertToShowDTOList(shows);
         return showDTOs;
     }
+
+//    public List<ShowDTO> getAllShowDTO(){
+//        List<ShowEntity> shows = showRepository.findAll();
+//        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
+//        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
+//        return showDTOs;
+//    }
     public List<ShowEntity> getShowHaveSpecialIsTrue(){
         return showRepository.findByIsSpecialIsTrue();
     }
-    public List<ShowDTO> getShowDTOHaveSpecialIsTrue(){
-        List<ShowEntity> shows = showRepository.findByIsSpecialIsTrue();
-        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
-        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
-        return showDTOs;
-    }
+//    public List<ShowDTO> getShowDTOHaveSpecialIsTrue(){
+//        List<ShowEntity> shows = showRepository.findByIsSpecialIsTrue();
+//        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
+//        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
+//        return showDTOs;
+//    }
 
 
     public List<ShowEntity> getShowHaveSpecialIsFalse(){
         return showRepository.findByIsSpecialIsFalse();
     }
 
-    public List<ShowDTO> getShowDTOHaveSpecialIsFalse(){
-        List<ShowEntity> shows = showRepository.findByIsSpecialIsFalse();
-        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
-        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
-        return showDTOs;
-    }
+//    public List<ShowDTO> getShowDTOHaveSpecialIsFalse(){
+//        List<ShowEntity> shows = showRepository.findByIsSpecialIsFalse();
+//        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
+//        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
+//        return showDTOs;
+//    }
 
-    public void creatShow(ShowEntity showEntity){
+    public void creatShow(ShowDTO show){
+        ShowEntity showEntity = ConvertDTO.convertToShowEntity(show);
+
+        for (TicketTypeEntity ticketType : showEntity.getTicketShows()) {
+            ticketType.setShowtime(showEntity);
+        }
+        showEntity.setTicketShows(showEntity.getTicketShows());
         showRepository.save(showEntity);
     }
 
@@ -69,32 +77,32 @@ public class ShowService {
         return showRepository.findSpecialTrueShowsAfterCurrentDate(currentDate);
     }
 
-    public List<ShowDTO> findShowsDTOAfterDateAndSpecialIsTrue(Date currentDate) {
-        List<ShowEntity> shows = showRepository.findSpecialTrueShowsAfterCurrentDate(currentDate);
-        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
-        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
-        return showDTOs;
-    }
+//    public List<ShowDTO> findShowsDTOAfterDateAndSpecialIsTrue(Date currentDate) {
+//        List<ShowEntity> shows = showRepository.findSpecialTrueShowsAfterCurrentDate(currentDate);
+//        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
+//        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
+//        return showDTOs;
+//    }
 
     public List<ShowEntity> findShowsAfterDateAndSpecialIsFalse(Date currentDate) {
         return showRepository.findSpecialFalseShowsAfterCurrentDate(currentDate);
     }
 
-    public List<ShowDTO> findShowsDTOAfterDateAndSpecialIsFalse(Date currentDate) {
-        List<ShowEntity> shows = showRepository.findSpecialFalseShowsAfterCurrentDate(currentDate);
-        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
-        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
-        return showDTOs;
-    }
+//    public List<ShowDTO> findShowsDTOAfterDateAndSpecialIsFalse(Date currentDate) {
+//        List<ShowEntity> shows = showRepository.findSpecialFalseShowsAfterCurrentDate(currentDate);
+//        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
+//        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
+//        return showDTOs;
+//    }
 
     public List<ShowEntity> findShowsAfterDate(Date currentDate) {
         return showRepository.findShowsAfterCurrentDate(currentDate);
     }
 
-    public List<ShowDTO> findShowsDTOAfterDate(Date currentDate) {
-        List<ShowEntity> shows = showRepository.findShowsAfterCurrentDate(currentDate);
-        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
-        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
-        return showDTOs;
-    }
+//    public List<ShowDTO> findShowsDTOAfterDate(Date currentDate) {
+//        List<ShowEntity> shows = showRepository.findShowsAfterCurrentDate(currentDate);
+//        List<TicketTypeEntity> tickets = ticketTypeRepository.findAll();
+//        List<ShowDTO> showDTOs = ConvertDTO.convertShowsToDTOs(shows, tickets);
+//        return showDTOs;
+//    }
 }

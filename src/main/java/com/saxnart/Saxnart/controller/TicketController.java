@@ -22,17 +22,17 @@ public class TicketController {
 
     @Autowired
     private TicketTypeService ticketTypeService;
-    @GetMapping("/getAllTicket")
-    public ResponseEntity<ResponseObject> getAllSeats() {
-        try {
-            List<TicketDTO> allSeats = ticketTypeService.getAllTicket();
-            return ResponseEntity.ok(new ResponseObject("ok", "Success", allSeats));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error get all tickets", ""));
-        }
-    }
+//    @GetMapping("/getAllTicket")
+//    public ResponseEntity<ResponseObject> getAllSeats() {
+//        try {
+//            List<TicketDTO> allSeats = ticketTypeService.getAllTicket();
+//            return ResponseEntity.ok(new ResponseObject("ok", "Success", allSeats));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ResponseObject("error", "Error get all tickets", ""));
+//        }
+//    }
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getTicketTypeById(@PathVariable Long id) {
         try{
@@ -57,19 +57,19 @@ public class TicketController {
         }
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<ResponseObject> updateTicketType(@PathVariable Long id, @RequestBody TicketTypeEntity updatedTicketType) {
-        try{
-            if(id.equals(updatedTicketType.getId())){
-                TicketTypeEntity ticketTypeEntity = ticketTypeService.updateTicketType(id, updatedTicketType);
-                return ResponseEntity.ok(new ResponseObject("ok", "update success", ticketTypeEntity));
-            }else return ResponseEntity.ok(new ResponseObject("ok", "Id không khớp", ""));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error get ticket", ""));
-        }
-    }
+//    @PatchMapping("/{id}")
+//    public ResponseEntity<ResponseObject> updateTicketType(@PathVariable Long id, @RequestBody TicketTypeEntity updatedTicketType) {
+//        try{
+//            if(id.equals(updatedTicketType.getId())){
+//                TicketTypeEntity ticketTypeEntity = ticketTypeService.updateTicketType(id, updatedTicketType);
+//                return ResponseEntity.ok(new ResponseObject("ok", "update success", ticketTypeEntity));
+//            }else return ResponseEntity.ok(new ResponseObject("ok", "Id không khớp", ""));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ResponseObject("error", "Error get ticket", ""));
+//        }
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteTicketType(@PathVariable Long id) {

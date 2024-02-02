@@ -28,7 +28,7 @@ public class ShowController {
     @GetMapping("/getAllShow")
     public ResponseEntity<ResponseObject> getAllShows() {
         try {
-            List<ShowDTO> allSeats = showService.getAllShowDTO();
+            List<ShowDTO> allSeats = showService.getAllShow();
             return ResponseEntity.ok(new ResponseObject("ok", "Success", allSeats));
         } catch (Exception e) {
             e.printStackTrace();
@@ -37,33 +37,33 @@ public class ShowController {
         }
     }
 
-    @GetMapping("/getShowsSpecialTrue")
-    public ResponseEntity<ResponseObject> getShowsBySpecialTrue() {
-        try {
-            List<ShowDTO> allShow = showService.getShowDTOHaveSpecialIsTrue();
-            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error get seat by show", ""));
-        }
-    }
+//    @GetMapping("/getShowsSpecialTrue")
+//    public ResponseEntity<ResponseObject> getShowsBySpecialTrue() {
+//        try {
+//            List<ShowDTO> allShow = showService.getShowDTOHaveSpecialIsTrue();
+//            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ResponseObject("error", "Error get seat by show", ""));
+//        }
+//    }
 
 
-    @GetMapping("/getShowsSpecialFalse")
-    public ResponseEntity<ResponseObject> getShowsBySpecialFalse() {
-        try {
-            List<ShowDTO> allShow = showService.getShowDTOHaveSpecialIsFalse();
-            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error get seat by show", ""));
-        }
-    }
+//    @GetMapping("/getShowsSpecialFalse")
+//    public ResponseEntity<ResponseObject> getShowsBySpecialFalse() {
+//        try {
+//            List<ShowDTO> allShow = showService.getShowDTOHaveSpecialIsFalse();
+//            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ResponseObject("error", "Error get seat by show", ""));
+//        }
+//    }
 
     @PostMapping("creatShow")
-    public ResponseEntity<ResponseObject> creatShow(@RequestBody ShowEntity show){
+    public ResponseEntity<ResponseObject> creatShow(@RequestBody ShowDTO show){
         try {
             showService.creatShow(show);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", ""));
