@@ -2,6 +2,7 @@ package com.saxnart.Saxnart.controller;
 
 
 import com.saxnart.Saxnart.dto.TicketDTO;
+import com.saxnart.Saxnart.dto.response.ShowDTO;
 import com.saxnart.Saxnart.entity.ShowEntity;
 import com.saxnart.Saxnart.model.ResponseObject;
 import com.saxnart.Saxnart.service.ShowService;
@@ -27,7 +28,7 @@ public class ShowController {
     @GetMapping("/getAllShow")
     public ResponseEntity<ResponseObject> getAllShows() {
         try {
-            List<ShowEntity> allSeats = showService.getAllShow();
+            List<ShowDTO> allSeats = showService.getAllShow();
             return ResponseEntity.ok(new ResponseObject("ok", "Success", allSeats));
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,33 +37,33 @@ public class ShowController {
         }
     }
 
-    @GetMapping("/getShowsSpecialTrue")
-    public ResponseEntity<ResponseObject> getShowsBySpecialTrue() {
-        try {
-            List<ShowEntity> allShow = showService.getShowHaveSpecialIsTrue();
-            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error get seat by show", ""));
-        }
-    }
+//    @GetMapping("/getShowsSpecialTrue")
+//    public ResponseEntity<ResponseObject> getShowsBySpecialTrue() {
+//        try {
+//            List<ShowDTO> allShow = showService.getShowDTOHaveSpecialIsTrue();
+//            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ResponseObject("error", "Error get seat by show", ""));
+//        }
+//    }
 
 
-    @GetMapping("/getShowsSpecialFalse")
-    public ResponseEntity<ResponseObject> getShowsBySpecialFalse() {
-        try {
-            List<ShowEntity> allShow = showService.getShowHaveSpecialIsFalse();
-            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error get seat by show", ""));
-        }
-    }
+//    @GetMapping("/getShowsSpecialFalse")
+//    public ResponseEntity<ResponseObject> getShowsBySpecialFalse() {
+//        try {
+//            List<ShowDTO> allShow = showService.getShowDTOHaveSpecialIsFalse();
+//            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ResponseObject("error", "Error get seat by show", ""));
+//        }
+//    }
 
     @PostMapping("creatShow")
-    public ResponseEntity<ResponseObject> creatShow(@RequestBody ShowEntity show){
+    public ResponseEntity<ResponseObject> creatShow(@RequestBody ShowDTO show){
         try {
             showService.creatShow(show);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", ""));
@@ -75,6 +76,7 @@ public class ShowController {
         try {
             LocalDate currentDate = LocalDate.now();
             Date currentDateSql = java.sql.Date.valueOf(currentDate);
+//            List<ShowDTO> allShow = showService.findShowsDTOAfterDateAndSpecialIsFalse(currentDateSql);
             List<ShowEntity> allShow = showService.findShowsAfterDateAndSpecialIsFalse(currentDateSql);
             return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
         } catch (Exception e) {
@@ -89,6 +91,7 @@ public class ShowController {
         try {
             LocalDate currentDate = LocalDate.now();
             Date currentDateSql = java.sql.Date.valueOf(currentDate);
+//            List<ShowDTO> allShow = showService.findShowsDTOAfterDateAndSpecialIsTrue(currentDateSql);
             List<ShowEntity> allShow = showService.findShowsAfterDateAndSpecialIsTrue(currentDateSql);
             return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
         } catch (Exception e) {
@@ -102,6 +105,7 @@ public class ShowController {
         try {
             LocalDate currentDate = LocalDate.now();
             Date currentDateSql = java.sql.Date.valueOf(currentDate);
+//            List<ShowDTO> allShow = showService.findShowsDTOAfterDate(currentDateSql);
             List<ShowEntity> allShow = showService.findShowsAfterDate(currentDateSql);
             return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
         } catch (Exception e) {

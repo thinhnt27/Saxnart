@@ -1,5 +1,6 @@
 package com.saxnart.Saxnart.service;
 
+import com.saxnart.Saxnart.entity.BlogEntity;
 import com.saxnart.Saxnart.entity.ChuyenNgheSiEntity;
 import com.saxnart.Saxnart.entity.GalleryEntity;
 import com.saxnart.Saxnart.repository.GalleryRepository;
@@ -32,6 +33,16 @@ public class GalleryService {
         } else {
             return "Không tìm thấy bản ghi để xóa";
         }
+    }
+
+    public String updateStatus(Long id) {
+        GalleryEntity galleryEntity = galleryRepository.findById(id).orElse(null);
+        if (galleryEntity != null) {
+            galleryEntity.setStatus(!galleryEntity.getStatus());
+            galleryRepository.save(galleryEntity);
+            return "Update thành công";
+        }
+        return "Không tìm thấy";
     }
 
 }

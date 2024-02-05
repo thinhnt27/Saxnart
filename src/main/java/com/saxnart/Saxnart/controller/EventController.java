@@ -1,9 +1,11 @@
 package com.saxnart.Saxnart.controller;
 
+import com.saxnart.Saxnart.entity.BlogEntity;
 import com.saxnart.Saxnart.entity.ChuyenNgheSiEntity;
 import com.saxnart.Saxnart.entity.EventEntity;
 import com.saxnart.Saxnart.model.ResponseObject;
 import com.saxnart.Saxnart.service.EventService;
+import jdk.jfr.Event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,7 +54,7 @@ public class EventController {
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error create chuyen nghe si", ""));
+                    .body(new ResponseObject("error", "Error create event", ""));
         }
     }
 
@@ -73,6 +75,21 @@ public class EventController {
         try {
             String updatedEvent = eventService.updateStatus(id);
             return ResponseEntity.ok(new ResponseObject("ok", updatedEvent, ""));
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error update status event", ""));
+        }
+    }
+
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<ResponseObject> update(@PathVariable Long id, @RequestBody EventEntity eventEntity) {
+        try {
+            if(id.equals(eventEntity.getId())){
+                EventEntity updatedEvent = eventService.update(id,eventEntity);
+                return ResponseEntity.ok(new ResponseObject("ok", "update success", updatedEvent));
+            }else return ResponseEntity.ok(new ResponseObject("ok", "Id không khớp", ""));
+
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

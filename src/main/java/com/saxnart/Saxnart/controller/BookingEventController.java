@@ -63,7 +63,7 @@ public class BookingEventController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error get all feedback", ""));
+                    .body(new ResponseObject("error", "Error get all booking event", ""));
         }
     }
 }
