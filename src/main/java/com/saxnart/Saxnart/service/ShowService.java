@@ -63,7 +63,7 @@ public class ShowService {
 //        return showDTOs;
 //    }
 
-    public void creatShow(ShowDTO show){
+    public void createShow(ShowDTO show){
         ShowEntity showEntity = ConvertDTO.convertToShowEntity(show);
 
         for (TicketTypeEntity ticketType : showEntity.getTicketShows()) {
