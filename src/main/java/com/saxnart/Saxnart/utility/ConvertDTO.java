@@ -132,18 +132,16 @@ public class ConvertDTO {
 
         // Convert TicketDTO list to TicketTypeEntity set
         if (showDTO.getTicketType() != null) {
-            System.out.println(showDTO.getTicketType());
             Set<TicketTypeEntity> ticketTypeEntities = showDTO.getTicketType().stream()
-                    .map(ConvertDTO::converttoTicketTypeEntity)
+                    .map(ConvertDTO::convertToTicketTypeEntity)
                     .collect(Collectors.toSet());
-            System.out.println(ticketTypeEntities);
             // Set the TicketTypeEntity set to the ShowEntity
             showEntity.setTicketShows(ticketTypeEntities);
         }
 
         return showEntity;
     }
-    public static TicketTypeEntity converttoTicketTypeEntity(TicketDTO ticketDTO) {
+    public static TicketTypeEntity convertToTicketTypeEntity(TicketDTO ticketDTO) {
         if (ticketDTO == null) {
             return null;
         }

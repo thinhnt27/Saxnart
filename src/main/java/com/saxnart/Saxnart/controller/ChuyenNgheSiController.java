@@ -80,7 +80,7 @@ public class ChuyenNgheSiController {
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<ResponseObject> updatep(@PathVariable Long id, @RequestBody ChuyenNgheSiEntity chuyenNgheSiEntity) {
+    public ResponseEntity<ResponseObject> update(@PathVariable Long id, @RequestBody ChuyenNgheSiEntity chuyenNgheSiEntity) {
         try {
             if(id.equals(chuyenNgheSiEntity.getId())){
                 ChuyenNgheSiEntity updatedChuyenNgheSi = chuyenNgheSiService.update(id,chuyenNgheSiEntity);

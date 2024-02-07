@@ -3,6 +3,7 @@ package com.saxnart.Saxnart.controller;
 
 import com.saxnart.Saxnart.dto.TicketDTO;
 import com.saxnart.Saxnart.dto.response.ShowDTO;
+import com.saxnart.Saxnart.entity.ChuyenNgheSiEntity;
 import com.saxnart.Saxnart.entity.ShowEntity;
 import com.saxnart.Saxnart.model.ResponseObject;
 import com.saxnart.Saxnart.service.ShowService;
@@ -28,8 +29,20 @@ public class ShowController {
     @GetMapping("/getAllShow")
     public ResponseEntity<ResponseObject> getAllShows() {
         try {
-            List<ShowDTO> allSeats = showService.getAllShow();
-            return ResponseEntity.ok(new ResponseObject("ok", "Success", allSeats));
+            List<ShowDTO> shows = showService.getAllShow();
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", shows));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get seat by show", ""));
+        }
+    }
+
+    @GetMapping("/getShowById/{id}")
+    public ResponseEntity<ResponseObject> getShowById(@PathVariable Long id ) {
+        try {
+            ShowDTO show = showService.getShowById(id);
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", show));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -115,5 +128,18 @@ public class ShowController {
         }
     }
 
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<ResponseObject> update(@PathVariable Long id, @RequestBody ShowDTO show) {
+        try {
+            if(id.equals(show.getId())){
+                ShowEntity showEntity = showService.updateShow(id,show);
+                return ResponseEntity.ok(new ResponseObject("ok", "update success", showEntity));
+            }else return ResponseEntity.ok(new ResponseObject("ok", "Id không khớp", ""));
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error update chuyen nghe si", ""));
+        }
+    }
 
 }
