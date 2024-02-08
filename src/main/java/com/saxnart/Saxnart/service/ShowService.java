@@ -11,11 +11,7 @@ import com.saxnart.Saxnart.utility.ConvertDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ShowService {
@@ -160,15 +156,19 @@ public class ShowService {
         }
     }
 
-    public void deleteShowById(Long showId) {
+    public String deleteShowById(Long showId) {
         // Kiểm tra xem show có tồn tại không
         ShowEntity showEntity = showRepository.findById(showId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy show với id: " + showId));
+                .orElse(null);
+        if (showEntity == null) {
+            return "Show với id này không tồn tại";
+        }
 
         // Xóa tất cả các vé liên quan đến show
-        ticketTypeRepository.deleteByShowtimeId(showId);
+        ticketTypeRepository.deleteByShowtime_Id(showId);
 
         // Xóa show
         showRepository.delete(showEntity);
+        return "delete success";
     }
 }
