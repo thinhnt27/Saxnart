@@ -154,4 +154,16 @@ public class ShowController {
         }
     }
 
+    @PatchMapping("/updateStatus/{id}")
+    public ResponseEntity<ResponseObject> updateStatus(@PathVariable Long id) {
+        try {
+            String updatedShow = showService.updateStatus(id);
+            return ResponseEntity.ok(new ResponseObject("ok", updatedShow, ""));
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error update gallery", ""));
+        }
+    }
+
 }

@@ -49,6 +49,8 @@ public class ShowEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
+    @Column
+    private Boolean status;
 
     @OneToMany(mappedBy = "showtime")
     @JsonIgnore
