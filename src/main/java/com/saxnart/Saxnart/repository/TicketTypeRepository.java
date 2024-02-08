@@ -12,4 +12,6 @@ public interface TicketTypeRepository extends JpaRepository<TicketTypeEntity, Lo
     Optional<TicketTypeEntity> findById(Long id);
 
     List<TicketTypeEntity> findByShowtime_Id(Long id);
+
+    void deleteByShowtimeId(Long Id);
 }

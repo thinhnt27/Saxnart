@@ -142,4 +142,16 @@ public class ShowController {
         }
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseObject> delete(@PathVariable Long id) {
+        try {
+            showService.deleteShowById(id);
+                return ResponseEntity.ok(new ResponseObject("ok", "update success", "");
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error update chuyen nghe si", ""));
+        }
+    }
+
 }

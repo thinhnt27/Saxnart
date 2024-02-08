@@ -23,6 +23,9 @@ public class ShowService {
     @Autowired
     private ShowRepository showRepository;
 
+    @Autowired
+    private  TicketTypeRepository ticketTypeRepository;
+
 
     public ShowEntity findById(Long id) {
         return showRepository.findById(id).orElse(null);
@@ -155,5 +158,17 @@ public class ShowService {
                 }
             }
         }
+    }
+
+    public void deleteShowById(Long showId) {
+        // Kiểm tra xem show có tồn tại không
+        ShowEntity showEntity = showRepository.findById(showId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy show với id: " + showId));
+
+        // Xóa tất cả các vé liên quan đến show
+        ticketTypeRepository.deleteByShowtimeId(showId);
+
+        // Xóa show
+        showRepository.delete(showEntity);
     }
 }
