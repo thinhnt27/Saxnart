@@ -22,6 +22,6 @@ public class ShowDTO {
     private String author;
     private Boolean isSpecial;
     private String content;
-    private String image;
+    private Boolean status;
     private List<TicketDTO> ticketType;
 }

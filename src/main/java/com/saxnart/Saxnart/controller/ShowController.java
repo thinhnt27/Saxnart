@@ -75,11 +75,11 @@ public class ShowController {
 //        }
 //    }
 
-    @PostMapping("createShow")
+    @PostMapping("/createShow")
     public ResponseEntity<ResponseObject> createShow(@RequestBody ShowDTO show){
         try {
-            showService.createShow(show);
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", ""));
+            String serviceShow = showService.createShow(show);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", serviceShow, ""));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error creating show", ""));
         }

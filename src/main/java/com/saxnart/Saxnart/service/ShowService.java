@@ -12,6 +12,8 @@ import com.saxnart.Saxnart.utility.ConvertDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 @Service
@@ -70,14 +72,28 @@ public class ShowService {
 //    }
 
 
-    public void createShow(ShowDTO show){
+    public String createShow(ShowDTO show){
         ShowEntity showEntity = ConvertDTO.convertToShowEntity(show);
-
-        for (TicketTypeEntity ticketType : showEntity.getTicketShows()) {
-            ticketType.setShowtime(showEntity);
+        if(!isShowDateExist(show)){
+            for (TicketTypeEntity ticketType : showEntity.getTicketShows()) {
+                ticketType.setShowtime(showEntity);
+            }
+            showEntity.setTicketShows(showEntity.getTicketShows());
+            showRepository.save(showEntity);
+            return "Success";
         }
-        showEntity.setTicketShows(showEntity.getTicketShows());
-        showRepository.save(showEntity);
+        return "Show date is exist";
+
+    }
+
+    public boolean isShowDateExist(ShowDTO show){
+        List<ShowEntity> shows = showRepository.findAll();
+        LocalDate showDate = show.getShowDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return shows.stream()
+                .map(ShowEntity::getShowDate)
+                .filter(Objects::nonNull)
+                .map(date -> date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate())
+                .anyMatch(entityShowDate -> entityShowDate.equals(showDate));
     }
 
     public List<ShowEntity> findShowsAfterDateAndSpecialIsTrue(Date currentDate) {
@@ -182,4 +198,6 @@ public class ShowService {
         }
         return "Không tìm thấy";
     }
+
+
 }
