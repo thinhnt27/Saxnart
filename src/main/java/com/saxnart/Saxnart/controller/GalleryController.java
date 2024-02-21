@@ -54,7 +54,7 @@ public class GalleryController {
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error delete chuyen nghe si", ""));
+                    .body(new ResponseObject("error", "Error delete gallery", ""));
         }
     }
 

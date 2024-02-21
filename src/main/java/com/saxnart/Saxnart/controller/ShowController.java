@@ -162,7 +162,7 @@ public class ShowController {
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error update gallery", ""));
+                    .body(new ResponseObject("error", "Error update show", ""));
         }
     }
 

@@ -22,7 +22,7 @@ public class BookingDetailController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.getBookingDetailsByShowTime(showtimeId)));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error, something wrong", ""));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get booking detail", ""));
             //new ResponseEntity<>("Error creating booking", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
