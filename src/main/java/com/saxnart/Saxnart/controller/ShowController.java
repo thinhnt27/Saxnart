@@ -81,7 +81,7 @@ public class ShowController {
             String serviceShow = showService.createShow(show);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", serviceShow, ""));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error creating show", ""));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", e.getMessage(), ""));
         }
     }
     @GetMapping("/getShowsSpecialFalseAndAfterDate")
@@ -138,7 +138,7 @@ public class ShowController {
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error update show", ""));
+                    .body(new ResponseObject("error", e.getMessage(), ""));
         }
     }
 
