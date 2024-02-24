@@ -162,6 +162,7 @@ public class ConvertDTO {
         showDTO.setPicture(showEntity.getPicture());
         showDTO.setAuthor(showEntity.getAuthor());
         showDTO.setIsSpecial(showEntity.getIsSpecial());
+        showDTO.setStatus(showEntity.getStatus());
         showDTO.setContent(showEntity.getContent());
         // Map other fields accordingly
         showDTO.setTicketType(
