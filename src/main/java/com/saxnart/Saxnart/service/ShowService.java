@@ -74,7 +74,7 @@ public class ShowService {
 
     public String createShow(ShowDTO show) throws Exception {
         ShowEntity showEntity = ConvertDTO.convertToShowEntity(show);
-        if(!isShowDateExist(show)){
+        if(!isShowDateExist(show, true)){
             for (TicketTypeEntity ticketType : showEntity.getTicketShows()) {
                 ticketType.setShowtime(showEntity);
             }
@@ -85,8 +85,11 @@ public class ShowService {
         throw new Exception("Show cùng ngày đã tồn tại.");
     }
 
-    public boolean isShowDateExist(ShowDTO show){
+    public boolean isShowDateExist(ShowDTO show, boolean createOrUpdate){
         List<ShowEntity> shows = showRepository.findAll();
+        if (!createOrUpdate) {
+            shows.removeIf(s -> s.getId() == show.getId());
+        }
         LocalDate showDate = show.getShowDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         return shows.stream()
                 .map(ShowEntity::getShowDate)
@@ -130,7 +133,7 @@ public class ShowService {
 
     public ShowEntity updateShow(Long showId, ShowDTO updatedShowDTO) throws Exception {
 
-        if (isShowDateExist(updatedShowDTO)){
+        if (isShowDateExist(updatedShowDTO, false)){
             throw new Exception("Show cùng ngày đã tồn tại.");
         }
         // Kiểm tra xem show có tồn tại trong cơ sở dữ liệu không

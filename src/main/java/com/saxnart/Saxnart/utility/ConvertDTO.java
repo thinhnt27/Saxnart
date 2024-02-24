@@ -128,6 +128,7 @@ public class ConvertDTO {
         showEntity.setPicture(showDTO.getPicture());
         showEntity.setAuthor(showDTO.getAuthor());
         showEntity.setIsSpecial(showDTO.getIsSpecial());
+        showEntity.setStatus(showDTO.getStatus());
         showEntity.setContent(showDTO.getContent());
 
         // Convert TicketDTO list to TicketTypeEntity set
