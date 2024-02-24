@@ -146,6 +146,7 @@ public class ShowService {
         existingShow.setPicture(updatedShowDTO.getPicture());
         existingShow.setAuthor(updatedShowDTO.getAuthor());
         existingShow.setIsSpecial(updatedShowDTO.getIsSpecial());
+        existingShow.setStatus(updatedShowDTO.getStatus());
         existingShow.setContent(updatedShowDTO.getContent());
 
         // Cập nhật thông tin các loại vé
