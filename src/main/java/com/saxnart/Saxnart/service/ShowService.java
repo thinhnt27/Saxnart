@@ -2,10 +2,12 @@ package com.saxnart.Saxnart.service;
 
 import com.saxnart.Saxnart.dto.TicketDTO;
 import com.saxnart.Saxnart.dto.response.ShowDTO;
+import com.saxnart.Saxnart.entity.BookingEntity;
 import com.saxnart.Saxnart.entity.GalleryEntity;
 import com.saxnart.Saxnart.entity.ShowEntity;
 import com.saxnart.Saxnart.entity.TicketTypeEntity;
 import com.saxnart.Saxnart.extention.ShowException;
+import com.saxnart.Saxnart.repository.BookingRepository;
 import com.saxnart.Saxnart.repository.ShowRepository;
 import com.saxnart.Saxnart.repository.TicketTypeRepository;
 import com.saxnart.Saxnart.utility.ConvertDTO;
@@ -24,6 +26,9 @@ public class ShowService {
 
     @Autowired
     private  TicketTypeRepository ticketTypeRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;
 
 
     public ShowEntity findById(Long id) {
@@ -184,6 +189,11 @@ public class ShowService {
         // Kiểm tra xem show có tồn tại không
         ShowEntity showEntity = showRepository.findById(showId)
                 .orElse(null);
+        List<TicketTypeEntity> ticketTypeEntities = ticketTypeRepository.findByShowtime_Id(showId);
+        List<BookingEntity> bookingEntities = bookingRepository.findByShowtime_Id(showId);
+        if(!ticketTypeEntities.isEmpty() || !bookingEntities.isEmpty()){
+            return "Show với id này bị dính khóa, không thể xóa";
+        }
         if (showEntity == null) {
             return "Show với id này không tồn tại";
         }
