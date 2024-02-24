@@ -81,7 +81,7 @@ public class ShowController {
             String serviceShow = showService.createShow(show);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", serviceShow, ""));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", e.getMessage(), ""));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("error", e.getMessage(), ""));
         }
     }
     @GetMapping("/getShowsSpecialFalseAndAfterDate")
