@@ -125,8 +125,10 @@ public class ShowService {
 //        return showDTOs;
 //    }
 
-    public List<ShowEntity> findShowsAfterDate(Date currentDate) {
-        return showRepository.findShowsAfterCurrentDate(currentDate);
+    public List<ShowDTO> findShowsAfterDate(Date currentDate) {
+        List<ShowEntity> shows =  showRepository.findShowsAfterCurrentDate(currentDate);
+        List<ShowDTO> showDTOS = ConvertDTO.convertToShowDTOList(shows);
+        return showDTOS;
     }
 
 //    public List<ShowDTO> findShowsDTOAfterDate(Date currentDate) {

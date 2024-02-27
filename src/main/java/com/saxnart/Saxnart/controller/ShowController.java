@@ -38,6 +38,20 @@ public class ShowController {
         }
     }
 
+    @GetMapping("/getShowsAfterDate")
+    public ResponseEntity<ResponseObject> getShowsByAfterDate() {
+        try {
+            LocalDate currentDate = LocalDate.now();
+            Date currentDateSql = java.sql.Date.valueOf(currentDate);
+            List<ShowDTO> allShow = showService.findShowsAfterDate(currentDateSql);
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get seat by show", ""));
+        }
+    }
+
     @GetMapping("/getShowById/{id}")
     public ResponseEntity<ResponseObject> getShowById(@PathVariable Long id ) {
         try {
@@ -113,20 +127,7 @@ public class ShowController {
                     .body(new ResponseObject("error", "Error get seat by show", ""));
         }
     }
-    @GetMapping("/getShowsAfterDate")
-    public ResponseEntity<ResponseObject> getShowsByAfterDate() {
-        try {
-            LocalDate currentDate = LocalDate.now();
-            Date currentDateSql = java.sql.Date.valueOf(currentDate);
-//            List<ShowDTO> allShow = showService.findShowsDTOAfterDate(currentDateSql);
-            List<ShowEntity> allShow = showService.findShowsAfterDate(currentDateSql);
-            return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("error", "Error get seat by show", ""));
-        }
-    }
+
 
     @PatchMapping("/update/{id}")
     public ResponseEntity<ResponseObject> update(@PathVariable Long id, @RequestBody ShowDTO show) {
