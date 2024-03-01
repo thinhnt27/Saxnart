@@ -19,5 +19,11 @@ public class ImageHomeEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String image;
 
+    @Column
+    private String title;
+
+    @Column
+    private String content;
+
 
 }

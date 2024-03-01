@@ -40,6 +40,8 @@ public class ImageHomeController {
             Optional<ImageHomeEntity> imageHome = imageHomeRopository.findById(imageHomeEntity.getId());
             if(imageHome.isPresent()){
                 imageHome.get().setImage(imageHomeEntity.getImage());
+                imageHome.get().setTitle(imageHomeEntity.getTitle());
+                imageHome.get().setContent(imageHomeEntity.getContent());
                 imageHomeRopository.save(imageHome.get());
             }
             return ResponseEntity.ok(new ResponseObject("ok", "", ""));
