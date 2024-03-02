@@ -130,6 +130,20 @@ public class ShowService {
         List<ShowDTO> showDTOS = ConvertDTO.convertToShowDTOList(shows);
         return showDTOS;
     }
+    public ShowDTO findFirstShowsAfterDateASC(Date currentDate) {
+        ShowEntity show =  showRepository.findFirstByShowDateAfterOrderByShowDateAsc(currentDate);
+        ShowDTO showDTO = ConvertDTO.convertToShowDTO(show);
+        return showDTO;
+    }
+
+    public ShowDTO findShowByShowDate(Date date) {
+        ShowEntity show =  showRepository.findByShowDate(date);
+        if(show == null){
+            return null;
+        }
+        ShowDTO showDTO = ConvertDTO.convertToShowDTO(show);
+        return showDTO;
+    }
 
 //    public List<ShowDTO> findShowsDTOAfterDate(Date currentDate) {
 //        List<ShowEntity> shows = showRepository.findShowsAfterCurrentDate(currentDate);

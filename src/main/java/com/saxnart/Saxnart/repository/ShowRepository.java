@@ -27,5 +27,11 @@ public interface ShowRepository extends JpaRepository<ShowEntity, Long> {
     @Query("SELECT s FROM ShowEntity s WHERE DATE(s.showDate) >= :currentDate ORDER BY s.showDate ASC")
     List<ShowEntity> findShowsAfterCurrentDate(@Param("currentDate") Date currentDate);
 
+    ShowEntity findFirstByShowDateAfterOrderByShowDateAsc(Date currentDate);
+
+//    ShowEntity findByShowDate(Date showDate);
+
+    @Query("SELECT s FROM ShowEntity s WHERE DATE(s.showDate) = :showDate")
+    ShowEntity findByShowDate(@Param("showDate") Date showDate);
 
 }

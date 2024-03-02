@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +46,38 @@ public class ShowController {
             Date currentDateSql = java.sql.Date.valueOf(currentDate);
             List<ShowDTO> allShow = showService.findShowsAfterDate(currentDateSql);
             return ResponseEntity.ok(new ResponseObject("ok", "Success", allShow));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get seat by show", ""));
+        }
+    }
+
+    @GetMapping("/getFirstShowAfterDateASC")
+    public ResponseEntity<ResponseObject> getFirstShowAfterDateASC() {
+        try {
+            LocalDate currentDate = LocalDate.now();
+            Date currentDateSql = java.sql.Date.valueOf(currentDate);
+            ShowDTO show = showService.findFirstShowsAfterDateASC(currentDateSql);
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", show));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get seat by show", ""));
+        }
+    }
+
+    @GetMapping("/getByShowDate/{dateString}")
+    public ResponseEntity<ResponseObject> getByShowDate(@PathVariable String dateString) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = format.parse(dateString);
+            java.sql.Date sqlDate = new java.sql.Date(date.getTime()); // Nếu bạn cần sử dụng java.sql.Date
+            ShowDTO show = showService.findShowByShowDate(sqlDate);
+            if(show == null){
+                return ResponseEntity.ok(new ResponseObject("ok", "Success", "Do not have any show in this day"));
+            }
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", show));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
