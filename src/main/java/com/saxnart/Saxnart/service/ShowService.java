@@ -1,9 +1,8 @@
 package com.saxnart.Saxnart.service;
 
 import com.saxnart.Saxnart.dto.TicketDTO;
-import com.saxnart.Saxnart.dto.response.ShowDTO;
+import com.saxnart.Saxnart.dto.ShowDTO;
 import com.saxnart.Saxnart.entity.BookingEntity;
-import com.saxnart.Saxnart.entity.GalleryEntity;
 import com.saxnart.Saxnart.entity.ShowEntity;
 import com.saxnart.Saxnart.entity.TicketTypeEntity;
 import com.saxnart.Saxnart.extention.ShowException;

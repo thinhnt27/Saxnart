@@ -1,4 +1,4 @@
-package com.saxnart.Saxnart.dto.response;
+package com.saxnart.Saxnart.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.saxnart.Saxnart.dto.TicketDTO;

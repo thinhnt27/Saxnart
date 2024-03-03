@@ -1,13 +1,10 @@
 package com.saxnart.Saxnart.controller;
 
 
-import com.saxnart.Saxnart.dto.TicketDTO;
-import com.saxnart.Saxnart.dto.response.ShowDTO;
-import com.saxnart.Saxnart.entity.ChuyenNgheSiEntity;
+import com.saxnart.Saxnart.dto.ShowDTO;
 import com.saxnart.Saxnart.entity.ShowEntity;
 import com.saxnart.Saxnart.model.ResponseObject;
 import com.saxnart.Saxnart.service.ShowService;
-import com.saxnart.Saxnart.service.TicketTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

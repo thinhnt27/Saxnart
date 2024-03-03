@@ -4,7 +4,7 @@ import com.saxnart.Saxnart.dto.BookingDTO;
 import com.saxnart.Saxnart.dto.BookingDetailDTO;
 import com.saxnart.Saxnart.dto.BookingSeatDTO;
 import com.saxnart.Saxnart.dto.TicketDTO;
-import com.saxnart.Saxnart.dto.response.ShowDTO;
+import com.saxnart.Saxnart.dto.ShowDTO;
 import com.saxnart.Saxnart.entity.*;
 import com.saxnart.Saxnart.service.SeatService;
 import com.saxnart.Saxnart.service.ShowService;
@@ -12,8 +12,6 @@ import com.saxnart.Saxnart.service.TicketTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
