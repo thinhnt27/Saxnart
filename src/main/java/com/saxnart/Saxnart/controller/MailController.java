@@ -39,6 +39,10 @@ public class MailController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ResponseObject("error", "Id is not match", ""));
             }
+            if (!mailEntity.getIsSecure().equals("true") && !mailEntity.getIsSecure().equals("false")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseObject("error", "Just true or false", ""));
+            }
             MailEntity updatedMail = mailService.updateMail(id, mailEntity);
             if (updatedMail != null) {
                 return ResponseEntity.ok(new ResponseObject("ok", "Mail updated successfully", updatedMail));

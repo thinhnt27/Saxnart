@@ -30,6 +30,6 @@ public class MailEntity {
     private String SMTPPassword;
 
     @Column
-    private Boolean isSecure;
+    private String isSecure;
 
 }
