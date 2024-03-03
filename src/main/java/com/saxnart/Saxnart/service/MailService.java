@@ -24,6 +24,7 @@ public class MailService {
             existingMail.setSMTPPort(mailEntity.getSMTPPort());
             existingMail.setSMTPUsername(mailEntity.getSMTPUsername());
             existingMail.setSMTPPassword(mailEntity.getSMTPPassword());
+            existingMail.setIsSecure(mailEntity.getIsSecure());
             return mailRepository.save(existingMail);
         }
         return null;

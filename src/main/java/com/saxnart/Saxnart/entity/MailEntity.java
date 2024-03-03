@@ -29,4 +29,7 @@ public class MailEntity {
     @Column
     private String SMTPPassword;
 
+    @Column
+    private Boolean isSecure;
+
 }
