@@ -1,8 +1,13 @@
 package com.saxnart.Saxnart.service;
 
+import com.saxnart.Saxnart.dto.Email;
 import com.saxnart.Saxnart.entity.MailEntity;
 import com.saxnart.Saxnart.repository.MailRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +17,25 @@ import java.util.Optional;
 public class MailService {
     @Autowired
     private MailRepository mailRepository;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    public void sendMail(Email email){
+        MimeMessage message = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom("thinhntse170224@fpt.edu.vn");
+            helper.setTo(email.getToEmail());
+            helper.setSubject(email.getSubject());
+            String htmlBody = "<html><body><h1>Hello</h1><p style=\"color:red;\">This is a test email with HTML and CSS content.</p></body></html>";
+            helper.setText(htmlBody, true);
+            javaMailSender.send(message);
+        }catch (MessagingException e){
+            e.printStackTrace();
+        }
+
+    }
 
     public List<MailEntity> getAllMails() {
         return mailRepository.findAll();

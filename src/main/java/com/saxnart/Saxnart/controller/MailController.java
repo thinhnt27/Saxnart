@@ -1,8 +1,10 @@
 package com.saxnart.Saxnart.controller;
 
+import com.saxnart.Saxnart.dto.Email;
 import com.saxnart.Saxnart.entity.MailEntity;
 import com.saxnart.Saxnart.model.ResponseObject;
 import com.saxnart.Saxnart.service.MailService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,5 +57,11 @@ public class MailController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseObject("error", "Error updating mail", ""));
         }
+    }
+
+    @PostMapping()
+    public ResponseEntity<?> sendMail(@Valid @RequestBody Email email){
+        mailService.sendMail(email);
+        return ResponseEntity.ok(new ResponseObject("ok", "Mail sent successfully", ""));
     }
 }
