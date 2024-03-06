@@ -139,6 +139,7 @@ public class BookingService {
 
     public String paymentSuccess(BookingDTO booking){
         BookingEntity bookingEntity = bookingRepository.findByEmailAndShowtime_IdAndNameAndCreatedDate(booking.getEmail(),booking.getShowtimeId(), booking.getName(), booking.getCreatedDate());
+
         if(bookingEntity != null){
             bookingEntity.setIsPayment(true);
             bookingRepository.save(bookingEntity);

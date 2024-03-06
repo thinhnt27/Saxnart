@@ -1,7 +1,7 @@
 package com.saxnart.Saxnart.controller;
 
 import com.saxnart.Saxnart.dto.Email;
-import com.saxnart.Saxnart.entity.MailEntity;
+import com.saxnart.Saxnart.entity.MailConfigEntity;
 import com.saxnart.Saxnart.model.ResponseObject;
 import com.saxnart.Saxnart.service.MailService;
 import jakarta.validation.Valid;
@@ -25,7 +25,7 @@ public class MailController {
     @GetMapping
     public ResponseEntity<ResponseObject> getAllMails() {
         try {
-            List<MailEntity> mailEntities = mailService.getAllMails();
+            List<MailConfigEntity> mailEntities = mailService.getAllMails();
             return ResponseEntity.ok(new ResponseObject("ok", "Success", mailEntities));
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,17 +35,13 @@ public class MailController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ResponseObject> updateMail(@PathVariable Long id, @RequestBody MailEntity mailEntity) {
+    public ResponseEntity<ResponseObject> updateMail(@PathVariable Long id, @RequestBody MailConfigEntity mailConfigEntity) {
         try {
-            if(!id.equals(mailEntity.getId())){
+            if(!id.equals(mailConfigEntity.getId())){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ResponseObject("error", "Id is not match", ""));
             }
-            if (!mailEntity.getIsSecure().equals("true") && !mailEntity.getIsSecure().equals("false")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ResponseObject("error", "Just true or false", ""));
-            }
-            MailEntity updatedMail = mailService.updateMail(id, mailEntity);
+            MailConfigEntity updatedMail = mailService.updateMail(id, mailConfigEntity);
             if (updatedMail != null) {
                 return ResponseEntity.ok(new ResponseObject("ok", "Mail updated successfully", updatedMail));
             } else {
