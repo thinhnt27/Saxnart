@@ -5,19 +5,23 @@ import com.saxnart.Saxnart.dto.BookingDetailDTO;
 import com.saxnart.Saxnart.dto.BookingSeatDTO;
 import com.saxnart.Saxnart.dto.request.BookingRequestDTO;
 import com.saxnart.Saxnart.dto.response.BookingDetailResponse;
-import com.saxnart.Saxnart.entity.BookingDetailEntity;
-import com.saxnart.Saxnart.entity.BookingEntity;
-import com.saxnart.Saxnart.entity.BookingSeatEntity;
-import com.saxnart.Saxnart.entity.SeatEntity;
+import com.saxnart.Saxnart.entity.*;
 import com.saxnart.Saxnart.repository.*;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +47,14 @@ public class BookingService {
     @Autowired
     private BookingSeatRepository bookingSeatRepository;
 
+    @Autowired
+    private MailRepository mailRepository;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private ShowRepository showRepository;
 
 
     public Boolean createBooking(BookingDTO bookingDTO) {
@@ -52,7 +64,7 @@ public class BookingService {
         for (BookingSeatDTO bookingSeatDTO : bookingDTO.getBookingSeats()) {
             boolean isBooked = seat.stream()
                     .anyMatch(seats -> seats.getId().equals(bookingSeatDTO.getSeatId()));
-            if(isBooked){
+            if (isBooked) {
                 return false;
             }
         }
@@ -67,6 +79,7 @@ public class BookingService {
         }
         return true;
     }
+
     public List<BookingDetailResponse> getBookingDetailsByShowTime(Long showTimeId) {
         List<BookingEntity> bookings = bookingRepository.findByStatusIsTrueAndShowtime_Id(showTimeId);
         List<BookingDetailResponse> bookingDetailsResponses = new ArrayList<>();
@@ -80,14 +93,14 @@ public class BookingService {
         return bookingDetailsResponses;
     }
 
-    public List<BookingEntity> getAllBooking(){
+    public List<BookingEntity> getAllBooking() {
         return bookingRepository.findAll();
     }
 
-    public List<BookingRequestDTO> getAllBookingByShow(Long showTimeId){
+    public List<BookingRequestDTO> getAllBookingByShow(Long showTimeId) {
         List<BookingEntity> bookings = bookingRepository.findByStatusIsTrueAndShowtime_Id(showTimeId);
-        List<BookingRequestDTO> bookingRequests =new ArrayList<>();
-        for (BookingEntity booking: bookings) {
+        List<BookingRequestDTO> bookingRequests = new ArrayList<>();
+        for (BookingEntity booking : bookings) {
             BookingRequestDTO bookingRequestDTO = new BookingRequestDTO();
             bookingRequestDTO.setId(booking.getId());
             bookingRequestDTO.setName(booking.getName());
@@ -98,7 +111,7 @@ public class BookingService {
             bookingRequestDTO.setStatus(booking.getStatus());
             bookingRequestDTO.setTotalPrice(bookingRequestDTO.getTotalPrice());
             List<String> seatNum = new ArrayList<>();
-            for (BookingSeatEntity bookingSeat: booking.getBookingSeats()) {
+            for (BookingSeatEntity bookingSeat : booking.getBookingSeats()) {
                 seatNum.add(bookingSeat.getSeat().getSeatNum());
             }
             bookingRequestDTO.setSeatNum(seatNum);
@@ -107,45 +120,95 @@ public class BookingService {
         return bookingRequests;
     }
 
-    public List<String> getAllBookingSeatNumByShow(Long showTimeId){
+    public List<String> getAllBookingSeatNumByShow(Long showTimeId) {
         List<BookingEntity> bookings = bookingRepository.findByStatusIsTrueAndShowtime_Id(showTimeId);
         List<String> seatNum = new ArrayList<>();
-        for (BookingEntity booking: bookings) {
-            for (BookingSeatEntity bookingSeat: booking.getBookingSeats()) {
+        for (BookingEntity booking : bookings) {
+            for (BookingSeatEntity bookingSeat : booking.getBookingSeats()) {
                 seatNum.add(bookingSeat.getSeat().getSeatNum());
             }
         }
         return seatNum;
     }
 
-    public List<String> checkSeatStatusInShow(Long showTimeId, List<String> seatNum){
-        List<String> listSeatNumInShow =  getAllBookingSeatNumByShow(showTimeId);
+    public List<String> checkSeatStatusInShow(Long showTimeId, List<String> seatNum) {
+        List<String> listSeatNumInShow = getAllBookingSeatNumByShow(showTimeId);
         List<String> resultList = new ArrayList<>();
-        for (String listSeatNum: listSeatNumInShow) {
+        for (String listSeatNum : listSeatNumInShow) {
             seatNum.stream()
                     .filter(seat -> seat.equals(listSeatNum))
                     .forEach(resultList::add);
         }
         return resultList.isEmpty() ? null : resultList;
     }
-    public String updateStatusBooking(BookingDTO booking){
-        BookingEntity bookingEntity = bookingRepository.findByEmailAndShowtime_IdAndNameAndCreatedDate(booking.getEmail(),booking.getShowtimeId(), booking.getName(), booking.getCreatedDate());
-        if(bookingEntity != null){
+
+    public String updateStatusBooking(BookingDTO booking) {
+        BookingEntity bookingEntity = bookingRepository.findByEmailAndShowtime_IdAndNameAndCreatedDate(booking.getEmail(), booking.getShowtimeId(), booking.getName(), booking.getCreatedDate());
+        if (bookingEntity != null) {
             bookingEntity.setStatus(false);
             bookingRepository.save(bookingEntity);
             return "Update status booking success";
-        }else  return "Booking does not exit";
+        } else return "Booking does not exit";
     }
 
-    public String paymentSuccess(BookingDTO booking){
-        BookingEntity bookingEntity = bookingRepository.findByEmailAndShowtime_IdAndNameAndCreatedDate(booking.getEmail(),booking.getShowtimeId(), booking.getName(), booking.getCreatedDate());
-
-        if(bookingEntity != null){
+    public String paymentSuccess(BookingDTO booking) {
+        BookingEntity bookingEntity = bookingRepository.findByEmailAndShowtime_IdAndNameAndCreatedDate(
+                booking.getEmail(), booking.getShowtimeId(), booking.getName(), booking.getCreatedDate());
+        MailConfigEntity mailConfigEntity = mailRepository.findAll().stream().findFirst().orElse(null);
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        if (bookingEntity != null) {
+            List<BookingSeatEntity> bookingSeatEntities = bookingSeatRepository.findByBooking_Id(bookingEntity.getId());
+            StringBuilder seat = new StringBuilder();
+            for (int i = 0; i < bookingSeatEntities.size(); i++) {
+                seat.append(bookingSeatEntities.get(i).getSeat().getSeatNum());
+                if (i < bookingSeatEntities.size() - 1) {
+                    seat.append(", ");
+                }
+            }
+            String seatString = seat.toString();
+            //Format VNĐ
+            DecimalFormat decimalFormat = new DecimalFormat("###,###,###,### VNĐ");
+            String formatPrice= decimalFormat.format(bookingEntity.getTotalPrice());
+            if (mailConfigEntity != null) {
+                MimeMessage message = javaMailSender.createMimeMessage();
+                try {
+                    MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+                    helper.setFrom(mailConfigEntity.getUsername());
+                    helper.setTo(bookingEntity.getEmail());
+                    helper.setSubject("Xác nhận đặt vé thành công");
+                    String htmlBody = "<html><head><meta charset=\"UTF-8\"></head><body><div style=\"text-align: center;\">"
+                            + "<h2 style=\"font-weight: bold; color: black;\">Saxn'Art Club</h2>"
+                            + "<div style=\"display: inline-block; background-color: #f0f0f0; padding: 20px; border-radius: 10px; text-align: left;\">"
+                            + "<div style=\"border: 1px solid #000; border-radius: 10px; padding: 10px; color: black;\">"
+                            + "<p>Xin chào ,</p>"
+                            + "<p style=\"color: black;\">Saxn'Art xác nhận bạn đã đặt vé thành công lúc " + formatter.format(new Date())
+                            + ". Bấm vào ... để xem chi tiết</p>"
+                            + "<p style=\"font-weight: bold; color: black;\">Thông tin người nhận vé:</p>"
+                            + "<table style=\"color: black;\">"
+                            + "<tr><td>Họ và tên: </td><td>" + bookingEntity.getName() + "</td></tr>"
+                            + "<tr><td>Số điện thoại: </td><td>" + bookingEntity.getTelephoneNum() + "</td></tr>"
+                            + "<tr><td>Email: </td><td>" + bookingEntity.getEmail() + "</td></tr>"
+                            + "</table>"
+                            + "<p style=\"font-weight: bold; color: black;\">Chi tiết vé của bạn như sau:</p>"
+                            + "<p style=\"color: black;\">Ghế đặt: " + seatString + "</p>"
+                            + "<p style=\"color: black;\">Thời gian: " + format.format(bookingEntity.getShowtime().getShowDate()) + "</p>"
+                            + "<p style=\"font-weight: bold; color: black; text-align: right;\">Tổng tiền: " + formatPrice + "</p>"
+                            + "</div>"
+                            + "</div></div></body></html>";
+                    helper.setText(htmlBody, true);
+                    javaMailSender.send(message);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
+            }
             bookingEntity.setIsPayment(true);
             bookingRepository.save(bookingEntity);
             return "Update status isPayment success";
-        }else  return "Booking does not exit";
+
+        } else return "Booking does not exit";
     }
+
     public String checkBookingOver15minute(BookingDTO booking) throws ParseException {
         BookingEntity bookingEntity = bookingRepository.findByEmailAndShowtime_IdAndNameAndCreatedDate(
                 booking.getEmail(), booking.getShowtimeId(), booking.getName(), booking.getCreatedDate());
@@ -169,7 +232,4 @@ public class BookingService {
             return "Booking does not exist";
         }
     }
-
-
-
 }

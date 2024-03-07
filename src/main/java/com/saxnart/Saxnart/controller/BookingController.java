@@ -94,8 +94,8 @@ public class BookingController {
     @PatchMapping("paymentSuccess")
     public ResponseEntity<ResponseObject> paymentSuccess(@RequestBody BookingDTO bookingEntity) {
         try {
-            bookingService.paymentSuccess(bookingEntity);
-            return ResponseEntity.ok(new ResponseObject("ok", bookingService.paymentSuccess(bookingEntity), ""));
+            String message = bookingService.paymentSuccess(bookingEntity);
+            return ResponseEntity.ok(new ResponseObject("ok", message, ""));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

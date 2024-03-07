@@ -22,4 +22,5 @@ public interface SeatRepository extends JpaRepository<SeatEntity, Long> {
             "WHERE b.showtime.id = :showtimeId AND b.status = true AND bs.booking.id = b.id AND s.id = bs.seat.id")
     List<SeatEntity> findBookedSeatsByShowtimeId(Long showtimeId);
 
+
 }
