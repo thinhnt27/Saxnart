@@ -1,19 +1,25 @@
 package com.saxnart.Saxnart.service;
 
 import com.saxnart.Saxnart.dto.TicketDTO;
+import com.saxnart.Saxnart.entity.BookingEntity;
 import com.saxnart.Saxnart.entity.TicketTypeEntity;
 import com.saxnart.Saxnart.extention.TickerTypeException;
+import com.saxnart.Saxnart.repository.BookingRepository;
 import com.saxnart.Saxnart.repository.TicketTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TicketTypeService {
     @Autowired
     private TicketTypeRepository ticketTypeRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;
 
     public TicketTypeEntity findById(Long id) {
         return ticketTypeRepository.findById(id).orElse(null);
@@ -62,6 +68,10 @@ public class TicketTypeService {
 //    }
 
     public String deleteTicketType(Long id) {
+//        Optional<TicketTypeEntity> ticketTypeEntity = ticketTypeRepository.findById(id);
+//        Long showtimeId = ticketTypeEntity.get().getShowtime().getId();
+//        List<BookingEntity> bookingEntities = bookingRepository.findByShowtime_Id(showtimeId);
+//        return "";
         if (ticketTypeRepository.existsById(id)) {
             ticketTypeRepository.deleteById(id);
             return "Xóa thành công";

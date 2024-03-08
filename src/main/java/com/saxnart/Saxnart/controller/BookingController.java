@@ -24,45 +24,51 @@ public class BookingController {
     @PostMapping("/create")
     public ResponseEntity<ResponseObject> createBooking(@RequestBody BookingDTO bookingDTO) {
         try {
-            boolean checkBooked = bookingService.createBooking(bookingDTO);
-            if(checkBooked) return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", ""));
-                else return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "this seat is not empty", ""));
+            String message = bookingService.createBooking(bookingDTO);
+            if (message.equals("Ticket request do no equal with ticket database")) {
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", message, ""));
+            } else if (message.equals("Do not have ticket")) {
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", message, ""));
+            } else if (message.equals("Seat Id do not equal bookingSeatDTO's seat id")) {
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", message, ""));
+            } else return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", ""));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error creating booking", ""));
         }
     }
 
     @GetMapping("/getAllBooking")
-    public ResponseEntity<ResponseObject> getAllBooking(){
+    public ResponseEntity<ResponseObject> getAllBooking() {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.getAllBooking()));
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking", ""));
         }
     }
 
     @GetMapping("/getAllBooking/{showtimeId}")
-    public ResponseEntity<ResponseObject> getAllBookingByShow(@PathVariable Long showtimeId){
+    public ResponseEntity<ResponseObject> getAllBookingByShow(@PathVariable Long showtimeId) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.getAllBookingByShow(showtimeId)));
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking by showId", ""));
         }
     }
+
     @GetMapping("/getAllBookingSeatNum/{showtimeId}")
-    public ResponseEntity<ResponseObject> getAllBookingSeatNum(@PathVariable Long showtimeId){
+    public ResponseEntity<ResponseObject> getAllBookingSeatNum(@PathVariable Long showtimeId) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.getAllBookingSeatNumByShow(showtimeId)));
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking seat by showId", ""));
         }
     }
 
     @GetMapping("/CheckBookingSeatNum/{showtimeId}")
-    public ResponseEntity<ResponseObject> CheckBookingSeatNum(@PathVariable Long showtimeId, @RequestBody List<String> seatNum){
+    public ResponseEntity<ResponseObject> CheckBookingSeatNum(@PathVariable Long showtimeId, @RequestBody List<String> seatNum) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.checkSeatStatusInShow(showtimeId, seatNum)));
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error check all booking by showId", ""));
         }
     }

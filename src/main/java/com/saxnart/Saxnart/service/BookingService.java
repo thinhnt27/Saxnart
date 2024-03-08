@@ -57,15 +57,26 @@ public class BookingService {
     private ShowRepository showRepository;
 
 
-    public Boolean createBooking(BookingDTO bookingDTO) {
+    public String createBooking(BookingDTO bookingDTO) {
         // Convert DTO to entities and save to the database
+        List<BookingDetailDTO> bookingDetailDTOS = bookingDTO.getBookingDetails();
+        double totalPrice = 0;
+        for (BookingDetailDTO bookingDetailDTO : bookingDetailDTOS) {
+            Optional<TicketTypeEntity> ticketType = ticketTypeRepository.findById(bookingDetailDTO.getTicketTypeId());
+            if (ticketType.isPresent()) {
+                if (bookingDetailDTO.getPrice() == ticketType.get().getPrice()) {
+                    totalPrice += bookingDetailDTO.getPrice() * bookingDetailDTO.getNumOfTickets();
+                } else return "Ticket request do no equal with ticket database";
+            } else return "Do not have ticket";
+        }
+        if (totalPrice != bookingDTO.getTotalPrice()) return "Total price is wrong";
         BookingEntity bookingEntity = convertToBookingEntity(bookingDTO);
         List<SeatEntity> seat = seatRepository.findBookedSeatsByShowtimeId(bookingDTO.getShowtimeId());
         for (BookingSeatDTO bookingSeatDTO : bookingDTO.getBookingSeats()) {
             boolean isBooked = seat.stream()
                     .anyMatch(seats -> seats.getId().equals(bookingSeatDTO.getSeatId()));
             if (isBooked) {
-                return false;
+                return "Seat Id do not equal bookingSeatDTO's seat id";
             }
         }
         bookingRepository.save(bookingEntity);
@@ -77,7 +88,7 @@ public class BookingService {
             BookingSeatEntity bookingSeatEntity = convertToBookingSeatEntity(bookingSeatDTO, bookingEntity);
             bookingSeatRepository.save(bookingSeatEntity);
         }
-        return true;
+        return "Success";
     }
 
     public List<BookingDetailResponse> getBookingDetailsByShowTime(Long showTimeId) {
@@ -158,6 +169,7 @@ public class BookingService {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         if (bookingEntity != null) {
+            //Bỏ seat num vào mail gửi
             List<BookingSeatEntity> bookingSeatEntities = bookingSeatRepository.findByBooking_Id(bookingEntity.getId());
             StringBuilder seat = new StringBuilder();
             for (int i = 0; i < bookingSeatEntities.size(); i++) {
@@ -169,7 +181,7 @@ public class BookingService {
             String seatString = seat.toString();
             //Format VNĐ
             DecimalFormat decimalFormat = new DecimalFormat("###,###,###,### VNĐ");
-            String formatPrice= decimalFormat.format(bookingEntity.getTotalPrice());
+            String formatPrice = decimalFormat.format(bookingEntity.getTotalPrice());
             if (mailConfigEntity != null) {
                 MimeMessage message = javaMailSender.createMimeMessage();
                 try {
