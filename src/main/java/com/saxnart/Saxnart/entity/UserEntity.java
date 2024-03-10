@@ -46,7 +46,6 @@ public class UserEntity implements UserDetails {
 
 
     @ManyToMany
-    @JsonIgnore
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id"))
@@ -67,6 +66,7 @@ public class UserEntity implements UserDetails {
         roles.stream().forEach(i ->authorities.add(new SimpleGrantedAuthority(i.getName())));
         return List.of(new SimpleGrantedAuthority(authorities.toString()));
     }
+
 
     public UserEntity(Long id, String fullName, String username, String hashedpassword, Set<RoleEntity> roles) {
         this.id = id;

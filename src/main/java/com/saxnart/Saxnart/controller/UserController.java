@@ -39,7 +39,7 @@ public class UserController {
     @PatchMapping("/changePassword/{userId}")
     public ResponseEntity<ResponseObject> changePassword(@RequestHeader("Authorization") String token,
                                                          @PathVariable Long userId,
-                                                         @RequestBody UserPasswordUpdateDTO userPasswordUpdateDTO){
+                                                         @RequestBody UserPasswordUpdateDTO userPasswordUpdateDTO) {
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ResponseObject("failed", "User ID cannot be null", ""));
@@ -64,7 +64,7 @@ public class UserController {
     public ResponseEntity<ResponseObject> changePassword(@RequestHeader("Authorization") String token,
                                                          @PathVariable Long userId,
                                                          @PathVariable Long otp,
-                                                         @RequestBody UserPasswordUpdateDTO userPasswordUpdateDTO){
+                                                         @RequestBody UserPasswordUpdateDTO userPasswordUpdateDTO) {
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ResponseObject("failed", "User ID cannot be null", ""));
@@ -72,6 +72,7 @@ public class UserController {
         try {
             if (TokenChecker.checkToken(token)) {
                 userService.changePasswordSuper(userId, otp, userPasswordUpdateDTO);
+                userService.changePasswordSuperFix(userId, userPasswordUpdateDTO);
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("ok", "Success", ""));
             }
@@ -85,9 +86,28 @@ public class UserController {
 
     }
 
+//    @PatchMapping("/changePasswordFix/{userId}")
+//    public ResponseEntity<ResponseObject> changePassword(@PathVariable Long userId,
+//                                                         @RequestBody UserPasswordUpdateDTO userPasswordUpdateDTO) {
+//        if (userId == null) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body(new ResponseObject("failed", "User ID cannot be null", ""));
+//        }
+//        try {
+//            userService.changePasswordSuperFix(userId, userPasswordUpdateDTO);
+//            return ResponseEntity.status(HttpStatus.OK)
+//                    .body(new ResponseObject("ok", "Success", ""));
+//        } catch (RuntimeException ex) {
+//            System.out.println(ex.getMessage());
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body(new ResponseObject("failed", ex.getMessage(), ""));
+//        }
+//
+//    }
+
     @GetMapping("/validMail")
     public ResponseEntity<ResponseObject> validMail(@RequestHeader("Authorization") String token,
-                                                    @RequestBody Email mail){
+                                                    @RequestBody Email mail) {
         try {
             if (TokenChecker.checkToken(token)) {
                 String message = userService.validMail(mail.getToEmail());
@@ -104,10 +124,9 @@ public class UserController {
     }
 
 
-
     @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<ResponseObject> deleteUser (@RequestHeader("Authorization") String token,
-                                                      @PathVariable Long userId){
+    public ResponseEntity<ResponseObject> deleteUser(@RequestHeader("Authorization") String token,
+                                                     @PathVariable Long userId) {
         try {
             if (TokenChecker.checkToken(token)) {
                 userService.delete(userId);

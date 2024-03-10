@@ -247,6 +247,22 @@ public class UserService {
             throw new UserException("User not found");
         }
     }
+    public void changePasswordSuperFix(Long userId, UserPasswordUpdateDTO userPasswordUpdateDTO){
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        Optional<UserEntity> userEntity = userRepository.findById(userId);
+        if (userEntity.isPresent()) {
+                String encodedPasswordFromDatabase  = userEntity.get().getPassword();
+                if (passwordEncoder.matches(userPasswordUpdateDTO.getNewPassword(), encodedPasswordFromDatabase)) {
+                    throw new UserException("New password must be different from the old one");
+                } else {
+                    UserEntity user = userEntity.get();
+                    user.setHashedpassword(passwordEncoder.encode(userPasswordUpdateDTO.getNewPassword()));
+                    userRepository.save(user);
+                }
+        } else {
+            throw new UserException("User not found");
+        }
+    }
 
 
     public String validMail(String mail) {
