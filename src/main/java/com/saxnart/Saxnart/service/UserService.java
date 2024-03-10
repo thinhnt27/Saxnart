@@ -118,15 +118,25 @@ public class UserService {
 //    }
 //
 //
-    public List<UserEntity> getAllUser() {
-        List<UserEntity> userEntities = userRepository.findAll();
-        List<UserEntity> userList = new ArrayList<>();
-        for (UserEntity userEntity: userEntities) {
-            userEntity.setHashedpassword(null);
-            userList.add(userEntity);
-        }
-        return userList;
+public List<UserEntity> getAllUser() {
+    List<UserEntity> userList = userRepository.findAll();
+    List<UserEntity> modifiedUserList = new ArrayList<>();
+
+    for (UserEntity user : userList) {
+        UserEntity modifiedUser = new UserEntity();
+        modifiedUser.setId(user.getId());
+        modifiedUser.setFullName(user.getFullName());
+        modifiedUser.setUsername(user.getUsername());
+        modifiedUser.setMail(user.getMail());
+        modifiedUser.setStatus(user.getStatus());
+        modifiedUser.setOTP(user.getOTP());
+        modifiedUser.setRoles(user.getRoles());
+        modifiedUser.setHashedpassword(null);
+        modifiedUserList.add(modifiedUser);
     }
+    return modifiedUserList;
+}
+
 
     public UserEntity getUserById(Long userId) {
 
