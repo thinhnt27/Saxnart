@@ -42,29 +42,13 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(STATELESS)
                 .and()
                 .authorizeRequests()
-                .requestMatchers("/api/**").permitAll()
-                .requestMatchers("/api/v1/**").authenticated()
+//                .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/api/user/**").authenticated()
+                .requestMatchers("/api/mail/**").authenticated()
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-//        http.csrf().disable();
-//        http.cors();
-//        http.sessionManagement().sessionCreationPolicy(STATELESS);
-//        http.authorizeRequests()
-//                .requestMatchers("/api/v1/auth/**").permitAll()
-//                .requestMatchers("/**").permitAll()
-//                .and()
-//                .csrf().disable()
-//                .authorizeRequests()
-//                .anyRequest()
-//                .authenticated()
-//                .and()
-//                .authenticationProvider(authenticationProvider)
-//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//        return http.build();
-//    }
 }

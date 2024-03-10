@@ -53,10 +53,6 @@ public class AuthenticationController {
     @Autowired
     RoleCustomRepo roleCustomRepo;
 
-    @GetMapping("/getAllUser")
-    public List<UserEntity> getAllUser(){
-        return userService.getAllUser();
-    }
 
     @PostMapping("/login")
     public ResponseEntity<ResponseObject> login(@RequestBody AuthenticationRequest authenticationRequest){
@@ -139,20 +135,4 @@ public class AuthenticationController {
                     .body(new ResponseObject("failed", ex.getMessage(), ""));
         }
     }
-//   @GetMapping("/logout")
-//public ResponseEntity<String> logout(@RequestHeader("Authorization") String authorizationHeader) {
-//       String token = authorizationHeader.substring(7);
-//    // Lấy token từ yêu cầu HTTP
-//    String token = request.getHeader("Authorization");
-//
-//    // Xóa token khỏi session
-//    SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-//    SecurityContextHolder.getContext().setAuthentication(null);
-//    SecurityContextHolder.getContext().getAuthentication().invalidate();
-//
-//    // Truyền thông với người dùng rằng họ đã đăng xuất
-//    return ResponseEntity.ok("Đăng xuất thành công!");
-//}
-//
-//}
 }

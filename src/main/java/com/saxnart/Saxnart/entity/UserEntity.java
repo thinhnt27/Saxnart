@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 
 @Entity
-@Data
 @Getter
 @Setter
 @NoArgsConstructor
@@ -35,6 +34,12 @@ public class UserEntity implements UserDetails {
 
     @Column
     private String hashedpassword;
+
+    @Column
+    private String mail;
+
+    @Column
+    private Long OTP;
 
 
     @Column Boolean status;

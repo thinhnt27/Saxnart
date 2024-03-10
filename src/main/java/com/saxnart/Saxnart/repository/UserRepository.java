@@ -15,5 +15,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByUsernameAndStatusTrue(String userName);
     Boolean existsByUsername(String username);
+
+    UserEntity findByMail(String mail);
+
 }
 
