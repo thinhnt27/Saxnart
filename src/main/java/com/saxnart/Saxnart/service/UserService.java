@@ -132,6 +132,9 @@ public List<UserEntity> getAllUser() {
         modifiedUser.setOTP(user.getOTP());
         modifiedUser.setRoles(user.getRoles());
         modifiedUser.setHashedpassword(null);
+        modifiedUser.setTimeLogin(user.getTimeLogin());
+        modifiedUser.setTimeLogout(user.getTimeLogout());
+        modifiedUser.setIpLogin(user.getIpLogin());
         modifiedUserList.add(modifiedUser);
     }
     return modifiedUserList;

@@ -161,14 +161,19 @@ public class AuthenticationController {
         }
     }
 
-    @GetMapping("/logout")
-    public ResponseEntity<ResponseObject> logout(@RequestBody AuthenticationRequest authenticationRequest) {
+    @GetMapping("/logout/{userId}")
+    public ResponseEntity<ResponseObject> logout(@PathVariable Long userId,
+                                                 @RequestBody AuthenticationRequest authenticationRequest) {
         Optional<UserEntity> o_user = userRepository.findByUsernameAndStatusTrue(authenticationRequest.getUsername());
         if(o_user.isPresent()){
-            o_user.get().setTimeLogout(new Date());
-            userRepository.save(o_user.get());
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseObject("ok", "Success", ""));
+            if(userId.equals(o_user.get().getId())){
+                o_user.get().setTimeLogout(new Date());
+                userRepository.save(o_user.get());
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("ok", "Success", ""));
+            }else
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("ok", "Id not matches", ""));
         }else  return ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseObject("ok", "Not found", ""));
     }
