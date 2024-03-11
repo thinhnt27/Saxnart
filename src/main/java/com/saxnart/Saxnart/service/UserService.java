@@ -142,8 +142,22 @@ public List<UserEntity> getAllUser() {
 
 
     public UserEntity getUserById(Long userId) {
-
-        return userRepository.findById(userId).orElse(null);
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        UserEntity modifiedUser = new UserEntity();
+        if (user != null) {
+            modifiedUser.setId(user.getId());
+            modifiedUser.setFullName(user.getFullName());
+            modifiedUser.setUsername(user.getUsername());
+            modifiedUser.setMail(user.getMail());
+            modifiedUser.setStatus(user.getStatus());
+            modifiedUser.setOTP(user.getOTP());
+            modifiedUser.setTimeLogin(user.getTimeLogin());
+            modifiedUser.setTimeLogout(user.getTimeLogout());
+            modifiedUser.setIpLogin(user.getIpLogin());
+            modifiedUser.setRoles(user.getRoles());
+            modifiedUser.setHashedpassword(null);
+        }
+        return modifiedUser;
     }
 
     public ResponseEntity<ResponseObject> deleteUser(Long userId) {

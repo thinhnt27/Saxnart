@@ -36,6 +36,19 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getUser/{userId}")
+    public ResponseEntity<ResponseObject> getUser( @PathVariable Long userId) {
+        try {
+            UserEntity user = userService.getUserById(userId);
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", user));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("error", "Error get ticket", ""));
+        }
+    }
+
+
     @PatchMapping("/changePassword/{userId}")
     public ResponseEntity<ResponseObject> changePassword(@RequestHeader("Authorization") String token,
                                                          @PathVariable Long userId,
