@@ -30,7 +30,7 @@ public class BlogEntity {
 
     @Column(name = "create_date")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "Asia/Ho_Chi_Minh")
     private Date createDate = new Date(System.currentTimeMillis() + (7 * 60 * 60 * 1000));
 
     @Column(name = "content", columnDefinition = "LONGTEXT")

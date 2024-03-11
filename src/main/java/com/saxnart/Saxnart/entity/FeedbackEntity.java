@@ -36,7 +36,7 @@ public class FeedbackEntity {
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "Asia/Ho_Chi_Minh")
     private Date createdDate;
 
     @Column
