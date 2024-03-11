@@ -61,8 +61,7 @@ public class UserController {
     }
 
     @PatchMapping("/changePassword/{userId}/{otp}")
-    public ResponseEntity<ResponseObject> changePassword(@RequestHeader("Authorization") String token,
-                                                         @PathVariable Long userId,
+    public ResponseEntity<ResponseObject> changePassword(@PathVariable Long userId,
                                                          @PathVariable Long otp,
                                                          @RequestBody UserPasswordUpdateDTO userPasswordUpdateDTO) {
         if (userId == null) {
@@ -70,14 +69,9 @@ public class UserController {
                     .body(new ResponseObject("failed", "User ID cannot be null", ""));
         }
         try {
-            if (TokenChecker.checkToken(token)) {
-                userService.changePasswordSuper(userId, otp, userPasswordUpdateDTO);
-                userService.changePasswordSuperFix(userId, userPasswordUpdateDTO);
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("ok", "Success", ""));
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ResponseObject("failed", "not found", ""));
+            userService.changePasswordSuper(userId, otp, userPasswordUpdateDTO);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("ok", "Success", ""));
         } catch (RuntimeException ex) {
             System.out.println(ex.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

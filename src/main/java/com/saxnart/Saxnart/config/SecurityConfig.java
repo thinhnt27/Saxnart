@@ -42,9 +42,11 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(STATELESS)
                 .and()
                 .authorizeRequests()
-//                .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/api/user/changePassword/**").permitAll()
                 .requestMatchers("/api/user/**").authenticated()
                 .requestMatchers("/api/mail/**").authenticated()
+                .requestMatchers("/api/v1/auth/signup").hasAnyRole("SUPERADMIN")
+                .requestMatchers("/api/v1/auth/updateUserPassword/**").hasAnyRole("SUPERADMIN")
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

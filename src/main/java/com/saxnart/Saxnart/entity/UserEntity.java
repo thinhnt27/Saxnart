@@ -1,5 +1,6 @@
 package com.saxnart.Saxnart.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -40,6 +41,20 @@ public class UserEntity implements UserDetails {
 
     @Column
     private Long OTP;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+    private Date timeLogin;
+
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+    private Date timeLogout;
+
+    @Column
+    private String ipLogin;
 
 
     @Column Boolean status;
