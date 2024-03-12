@@ -161,7 +161,7 @@ public class AuthenticationController {
         }
     }
 
-    @GetMapping("/logout/{userId}")
+    @PostMapping("/logout/{userId}")
     public ResponseEntity<ResponseObject> logout(@PathVariable Long userId,
                                                  @RequestBody AuthenticationRequest authenticationRequest) {
         Optional<UserEntity> o_user = userRepository.findByUsernameAndStatusTrue(authenticationRequest.getUsername());
