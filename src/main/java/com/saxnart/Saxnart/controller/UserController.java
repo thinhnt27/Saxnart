@@ -112,7 +112,7 @@ public class UserController {
 //
 //    }
 
-    @GetMapping("/validMail")
+    @PostMapping("/validMail")
     public ResponseEntity<ResponseObject> validMail(@RequestBody Email mail) {
         try {
                 String message = userService.validMail(mail.getToEmail());
