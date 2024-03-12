@@ -113,16 +113,11 @@ public class UserController {
 //    }
 
     @GetMapping("/validMail")
-    public ResponseEntity<ResponseObject> validMail(@RequestHeader("Authorization") String token,
-                                                    @RequestBody Email mail) {
+    public ResponseEntity<ResponseObject> validMail(@RequestBody Email mail) {
         try {
-            if (TokenChecker.checkToken(token)) {
                 String message = userService.validMail(mail.getToEmail());
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("ok", "Success", message));
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ResponseObject("failed", "not found", ""));
         } catch (RuntimeException ex) {
             System.out.println(ex.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

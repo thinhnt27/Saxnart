@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/auth/signup").authenticated()
                 .requestMatchers("/api/v1/auth/updateUserPassword/**").authenticated()
 //                .requestMatchers("/api/v1/auth/**").authenticated()
-                .requestMatchers("/api/user/changePassword/**").permitAll()
+                .requestMatchers("/api/user/changePassword/**", "/api/user/validMail").permitAll()
                 .requestMatchers("/api/user/**").authenticated()
                 .requestMatchers("/api/mail/**").authenticated()
                 .and()
