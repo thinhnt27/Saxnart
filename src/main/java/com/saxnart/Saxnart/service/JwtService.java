@@ -24,7 +24,8 @@ public class JwtService {
         Algorithm algorithm = Algorithm.HMAC256(Secret_key.getBytes());
         return JWT.create()
 //                .withSubject(user.getUsername())
-//                .withClaim("id", user.getId())
+                .withClaim("username", user.getUsername())
+                .withClaim("id", user.getId())
                 .withClaim("user",user.getUsername())
                 .withClaim("fullname",user.getFullName())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 3600*1000))
@@ -35,8 +36,8 @@ public class JwtService {
     public String generateRefreshToken(UserEntity user, Collection<SimpleGrantedAuthority> authorities){
         Algorithm algorithm = Algorithm.HMAC256(Secret_key.getBytes());
         return JWT.create()
-//                .withSubject(user.getUsername())
-//                .withClaim("id", user.getId())
+                .withClaim("username", user.getUsername())
+                .withClaim("id", user.getId())
                 .withClaim("user",user.getUsername())
                 .withClaim("fullname",user.getFullName())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 30L*3600*24*1000))
