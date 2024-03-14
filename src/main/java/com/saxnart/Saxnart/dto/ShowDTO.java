@@ -2,6 +2,9 @@ package com.saxnart.Saxnart.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.saxnart.Saxnart.dto.TicketDTO;
+import jakarta.persistence.Column;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.*;
 
 import java.util.Date;
@@ -24,4 +27,12 @@ public class ShowDTO {
     private String content;
     private Boolean status;
     private List<TicketDTO> ticketType;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "Asia/Ho_Chi_Minh")
+    private Date createDate;
+
+    private String authorModified;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "Asia/Ho_Chi_Minh")
+    private Date dateModified;
 }

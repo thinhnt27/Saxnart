@@ -6,6 +6,7 @@ import com.saxnart.Saxnart.repository.MailRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -34,32 +35,24 @@ public class MailService {
                 MimeMessageHelper helper = new MimeMessageHelper(message, false,"UTF-8");
                 helper.setFrom(mailConfigEntity.getUsername());
                 helper.setTo(email.getToEmail());
-                helper.setSubject(email.getSubject());
-                String htmlBody = "<html><head><meta charset=\"UTF-8\"></head><body><div style=\"text-align: center;\">"
-                        + "<h2 style=\"font-weight: bold; color: black;\">Saxn'Art Club</h2>"
-                        + "<div style=\"display: inline-block; background-color: #f0f0f0; padding: 20px; border-radius: 10px; text-align: left;\">"
-                        + "<div style=\"border: 1px solid #000; border-radius: 10px; padding: 10px; color: black;\">"
-                        + "<p>Xin chào ,</p>"
-                        + "<p style=\"color: black;\">Saxn'Art xác nhận bạn đã đặt vé thành công lúc " + formatter.format(new Date())
-                        + ". Bấm vào ... để xem chi tiết</p>"
-                        + "<p style=\"font-weight: bold; color: black;\">Thông tin người nhận vé:</p>"
-                        + "<table>"
-                        + "<tr><td>Họ và tên:</td><td style=\"color: black;\"></td></tr>"
-                        + "<tr><td>Số điện thoại:</td><td style=\"color: black;\"></td></tr>"
-                        + "<tr><td>Email:</td><td style=\"color: black;\"></td></tr>"
-                        + "</table>"
-                        + "<p style=\"font-weight: bold; color: black;\">Chi tiết vé của bạn như sau:</p>"
-                        + "<p style=\"color: black;\">Ghế đặt: </p>"
-                        + "<p style=\"color: black;\">Thời gian: </p>"
-                        + "<p style=\"color: black;\">Tổng tiền: </p>"
-                        + "</div>"
-                        + "</div></div></body></html>";
-                helper.setText(htmlBody, true);
+                message.setSubject("[Saxn'Art] - Test");
+                message.setText("Test");
                 javaMailSender.send(message);
             } catch (MessagingException e) {
                 e.printStackTrace();
             }
         }
+    }
+    public String validMail(String mail) {
+        sendEmail(mail, "[Sax'nArt]-Test", "Test");
+        return "Success";
+    }
+    private void sendEmail(String to, String subject, String text) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(text);
+        javaMailSender.send(message);
     }
 
     public List<MailConfigEntity> getAllMails() {
@@ -75,6 +68,8 @@ public class MailService {
             existingMail.setPassword(mailConfigEntity.getPassword());
             existingMail.setSmtpAuth(mailConfigEntity.getSmtpAuth());
             existingMail.setSmtpStartTlsEnable(mailConfigEntity.getSmtpStartTlsEnable());
+            existingMail.setDateModified(new Date());
+            existingMail.setAuthorModified(mailConfigEntity.getAuthorModified());
             return mailRepository.save(existingMail);
         }
         return null;

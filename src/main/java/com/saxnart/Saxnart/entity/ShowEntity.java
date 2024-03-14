@@ -44,6 +44,19 @@ public class ShowEntity {
     private String author;
 
     @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "Asia/Ho_Chi_Minh")
+    private Date createDate;
+
+    @Column
+    private String authorModified;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "Asia/Ho_Chi_Minh")
+    private Date dateModified;
+
+    @Column
     private Boolean isSpecial;
 
     @Column(columnDefinition = "LONGTEXT")

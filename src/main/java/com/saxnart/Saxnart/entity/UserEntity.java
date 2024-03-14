@@ -3,10 +3,7 @@ package com.saxnart.Saxnart.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +15,7 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "User")
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity implements UserDetails {
@@ -41,6 +39,14 @@ public class UserEntity implements UserDetails {
 
     @Column
     private Long OTP;
+
+    @Column
+    private String authorModified;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "Asia/Ho_Chi_Minh")
+    private Date dateModified;
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)

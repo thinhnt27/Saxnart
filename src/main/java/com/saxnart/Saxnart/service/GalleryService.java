@@ -7,6 +7,7 @@ import com.saxnart.Saxnart.repository.GalleryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,6 +24,7 @@ public class GalleryService {
     }
 
     public GalleryEntity saveGallery(GalleryEntity galleryEntity) {
+        galleryEntity.setCreateDate(new Date());
         return galleryRepository.save(galleryEntity);
     }
 
@@ -39,6 +41,7 @@ public class GalleryService {
         GalleryEntity galleryEntity = galleryRepository.findById(id).orElse(null);
         if (galleryEntity != null) {
             galleryEntity.setStatus(!galleryEntity.getStatus());
+            galleryEntity.setDateModified(new Date());
             galleryRepository.save(galleryEntity);
             return "Update thành công";
         }

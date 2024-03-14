@@ -11,4 +11,5 @@ public class UserPasswordUpdateDTO {
     private String oldPassword;
     private String newPassword;
     private String confirmPassword;
+    private String authorModified;
 }

@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .requestMatchers("/api/v1/auth/signup").authenticated()
                 .requestMatchers("/api/v1/auth/updateUserPassword/**").authenticated()
+                .requestMatchers("/api/mail/mailTest").permitAll()
 //                .requestMatchers("/api/v1/auth/**").authenticated()
                 .requestMatchers("/api/user/changePassword/**", "/api/user/validMail").permitAll()
                 .requestMatchers("/api/user/**").authenticated()

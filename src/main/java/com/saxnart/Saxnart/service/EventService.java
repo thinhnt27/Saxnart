@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ public class EventService {
     }
 
     public EventEntity saveEvent(EventEntity eventEntity) {
+        eventEntity.setCreateDate(new Date());
         return eventRepository.save(eventEntity);
     }
 
@@ -50,7 +52,7 @@ public class EventService {
 
     public EventEntity update(Long id, EventEntity updatedEvent) {
         Optional<EventEntity> existingEventOptional = eventRepository.findById(id);
-
+        updatedEvent.setDateModified(new Date());
         if (existingEventOptional.isPresent()) {
             EventEntity existingEvent = existingEventOptional.get();
             ModelMapper modelMapper = new ModelMapper();

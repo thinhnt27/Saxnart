@@ -128,6 +128,7 @@ public class ConvertDTO {
         showEntity.setIsSpecial(showDTO.getIsSpecial());
         showEntity.setStatus(showDTO.getStatus());
         showEntity.setContent(showDTO.getContent());
+        showEntity.setCreateDate(new Date());
 
         // Convert TicketDTO list to TicketTypeEntity set
         if (showDTO.getTicketType() != null) {
@@ -163,6 +164,9 @@ public class ConvertDTO {
         showDTO.setIsSpecial(showEntity.getIsSpecial());
         showDTO.setStatus(showEntity.getStatus());
         showDTO.setContent(showEntity.getContent());
+        showDTO.setAuthorModified(showEntity.getAuthorModified());
+        showDTO.setDateModified(showEntity.getDateModified());
+        showDTO.setCreateDate(showEntity.getCreateDate());
         // Map other fields accordingly
         showDTO.setTicketType(
                 ticketTypeService.findByShowtimeId(showEntity.getId()).stream()

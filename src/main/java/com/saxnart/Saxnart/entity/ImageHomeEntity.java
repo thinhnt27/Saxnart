@@ -1,7 +1,10 @@
 package com.saxnart.Saxnart.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Date;
 
 @Entity
 @Getter
@@ -24,6 +27,14 @@ public class ImageHomeEntity {
 
     @Column
     private String content;
+
+    @Column
+    private String authorModified;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "Asia/Ho_Chi_Minh")
+    private Date dateModified;
 
 
 }

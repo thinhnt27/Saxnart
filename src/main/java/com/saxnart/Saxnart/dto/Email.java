@@ -9,12 +9,10 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 public class Email {
-    @NotBlank(message = "Email can not be bank")
+
     private String toEmail;
 
-    @NotBlank(message = "Subject can not be bank")
     private String subject;
 
-    @NotBlank(message = "Body can not be bank")
     private String body;
 }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,9 +43,11 @@ public class ImageHomeController {
                 imageHome.get().setImage(imageHomeEntity.getImage());
                 imageHome.get().setTitle(imageHomeEntity.getTitle());
                 imageHome.get().setContent(imageHomeEntity.getContent());
+                imageHome.get().setDateModified(new Date());
+                imageHome.get().setAuthorModified(imageHomeEntity.getAuthorModified());
                 imageHomeRopository.save(imageHome.get());
             }
-            return ResponseEntity.ok(new ResponseObject("ok", "", ""));
+            return ResponseEntity.ok(new ResponseObject("ok", "Success", ""));
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

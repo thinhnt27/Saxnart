@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,7 @@ public class BlogService {
     }
 
     public BlogEntity saveBlog(BlogEntity blogEntity) {
+        blogEntity.setCreateDate(new Date());
         return blogRepository.save(blogEntity);
     }
 
@@ -51,13 +53,12 @@ public class BlogService {
 
     public BlogEntity update(Long id, BlogEntity updatedBlog) {
         Optional<BlogEntity> existingBlogOptional = blogRepository.findById(id);
-
+        updatedBlog.setDateModified(new Date());
         if (existingBlogOptional.isPresent()) {
             BlogEntity existingBlog = existingBlogOptional.get();
             ModelMapper modelMapper = new ModelMapper();
             modelMapper.getConfiguration().setSkipNullEnabled(true);
             modelMapper.map(updatedBlog, existingBlog);
-
             blogRepository.save(existingBlog);
             return existingBlog;
         } else {

@@ -168,6 +168,8 @@ public class ShowService {
         existingShow.setIsSpecial(updatedShowDTO.getIsSpecial());
         existingShow.setStatus(updatedShowDTO.getStatus());
         existingShow.setContent(updatedShowDTO.getContent());
+        existingShow.setAuthorModified(updatedShowDTO.getAuthorModified());
+        existingShow.setDateModified(new Date());
 
         // Cập nhật thông tin các loại vé
         updateTicketTypes(existingShow, updatedShowDTO.getTicketType());

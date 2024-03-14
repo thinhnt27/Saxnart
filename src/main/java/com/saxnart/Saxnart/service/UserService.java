@@ -135,6 +135,8 @@ public List<UserEntity> getAllUser() {
         modifiedUser.setTimeLogin(user.getTimeLogin());
         modifiedUser.setTimeLogout(user.getTimeLogout());
         modifiedUser.setIpLogin(user.getIpLogin());
+        modifiedUser.setDateModified(user.getDateModified());
+        modifiedUser.setAuthorModified(user.getAuthorModified());
         modifiedUserList.add(modifiedUser);
     }
     return modifiedUserList;
@@ -156,6 +158,8 @@ public List<UserEntity> getAllUser() {
             modifiedUser.setIpLogin(user.getIpLogin());
             modifiedUser.setRoles(user.getRoles());
             modifiedUser.setHashedpassword(null);
+            modifiedUser.setDateModified(user.getDateModified());
+            modifiedUser.setAuthorModified(user.getAuthorModified());
         }
         return modifiedUser;
     }
@@ -250,6 +254,8 @@ public List<UserEntity> getAllUser() {
             } else {
                 UserEntity user = userEntity.get();
                 user.setHashedpassword(passwordEncoder.encode(userPasswordUpdateDTO.getNewPassword()));
+                user.setAuthorModified(userPasswordUpdateDTO.getAuthorModified());
+                user.setDateModified(new Date());
                 userRepository.save(user);
             }
         } else {
@@ -267,6 +273,8 @@ public List<UserEntity> getAllUser() {
                 } else {
                     UserEntity user = userEntity.get();
                     user.setHashedpassword(passwordEncoder.encode(userPasswordUpdateDTO.getNewPassword()));
+                    user.setAuthorModified(userPasswordUpdateDTO.getAuthorModified());
+                    user.setDateModified(new Date());
                     userRepository.save(user);
                 }
             }else throw new UserException("OTP is not matches");
@@ -284,6 +292,8 @@ public List<UserEntity> getAllUser() {
                 } else {
                     UserEntity user = userEntity.get();
                     user.setHashedpassword(passwordEncoder.encode(userPasswordUpdateDTO.getNewPassword()));
+                    user.setAuthorModified(userPasswordUpdateDTO.getAuthorModified());
+                    user.setDateModified(new Date());
                     userRepository.save(user);
                 }
         } else {

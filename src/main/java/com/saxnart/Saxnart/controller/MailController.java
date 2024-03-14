@@ -57,9 +57,9 @@ public class MailController {
         }
     }
 
-    @PostMapping()
+    @PostMapping("/mailTest")
     public ResponseEntity<?> sendMail(@Valid @RequestBody Email email){
-        mailService.sendMail(email);
+        mailService.validMail(email.getToEmail());
         return ResponseEntity.ok(new ResponseObject("ok", "Mail sent successfully", ""));
     }
 }

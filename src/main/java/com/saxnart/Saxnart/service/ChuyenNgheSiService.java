@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ public class ChuyenNgheSiService {
     }
 
     public ChuyenNgheSiEntity saveChuyenNgheSi(ChuyenNgheSiEntity chuyenNgheSiEntity) {
+        chuyenNgheSiEntity.setCreateDate(new Date());
         return chuyenNgheSiRepository.save(chuyenNgheSiEntity);
     }
 
@@ -50,7 +52,7 @@ public class ChuyenNgheSiService {
 
     public ChuyenNgheSiEntity update(Long id, ChuyenNgheSiEntity updatedChuyenNgheSi) {
         Optional<ChuyenNgheSiEntity> existingChuyenNgheSiOptional = chuyenNgheSiRepository.findById(id);
-
+        updatedChuyenNgheSi.setDateModified(new Date());
         if (existingChuyenNgheSiOptional.isPresent()) {
             ChuyenNgheSiEntity existingChuyenNgheSi = existingChuyenNgheSiOptional.get();
             ModelMapper modelMapper = new ModelMapper();
