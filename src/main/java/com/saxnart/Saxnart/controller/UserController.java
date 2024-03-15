@@ -19,7 +19,6 @@ import java.util.List;
 @RequestMapping("api/user")
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000", "https://saxnartclub.com"})
-@PreAuthorize("hasRole('SUPERADMIN')")
 public class UserController {
     @Autowired
     UserService userService;

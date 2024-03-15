@@ -12,7 +12,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 import java.util.Collections;
+
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -34,7 +36,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
@@ -42,14 +44,19 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(STATELESS)
                 .and()
                 .authorizeRequests()
-                .requestMatchers("/api/v1/auth/signup").authenticated()
-                .requestMatchers("/api/v1/auth/updateUserPassword/**").authenticated()
-                .requestMatchers("/api/mail/mailTest").permitAll()
-//                .requestMatchers("/api/v1/auth/**").authenticated()
-                .requestMatchers("/api/user/changePassword/**", "/api/user/validMail").permitAll()
-                .requestMatchers("/api/ip/**").authenticated()
-                .requestMatchers("/api/user/**").authenticated()
-                .requestMatchers("/api/mail/**").authenticated()
+                .requestMatchers("/api/user/changePassword/**", "/api/user/validMail","/api/ip/create").permitAll()
+                .requestMatchers("/api/v1/auth/signup", "/api/v1/auth/updateUserPassword/**","/api/mail/**").hasAnyAuthority("ADMIN", "SUPERADMIN")
+                .requestMatchers("/api/ip", "/api/ip/**","/api/user/**").hasAnyAuthority("SUPERADMIN")
+
+//                .requestMatchers("/api/mail/mailTest").permitAll()
+//                .requestMatchers("/api/ip/create").permitAll()
+
+//                .requestMatchers("/api/ip/**").authenticated()
+//                .requestMatchers("/api/user/**").authenticated()
+//                .requestMatchers("/api/mail/**").authenticated()
+
+//                .requestMatchers("/api/v1/auth/signup").authenticated()
+                //                .requestMatchers("/api/ip").authenticated()
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -96,7 +96,6 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    @PreAuthorize("hasRole('SUPERADMIN')")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
@@ -138,7 +137,6 @@ public class AuthenticationController {
     }
 
     @PatchMapping("/updateUserPassword/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseObject> updateUserPassword(@RequestHeader("Authorization") String token,
                                                              @PathVariable Long userId,
                                                              @RequestBody UserPasswordUpdateDTO userPasswordUpdateDTO) {

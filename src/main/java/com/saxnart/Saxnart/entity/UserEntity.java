@@ -81,11 +81,20 @@ public class UserEntity implements UserDetails {
 
 
 
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//        roles.stream().forEach(i ->authorities.add(new SimpleGrantedAuthority(i.getName())));
+//        return List.of(new SimpleGrantedAuthority(authorities.toString()));
+//    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        roles.stream().forEach(i ->authorities.add(new SimpleGrantedAuthority(i.getName())));
-        return List.of(new SimpleGrantedAuthority(authorities.toString()));
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        for (RoleEntity role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
+        return authorities;
     }
 
 
