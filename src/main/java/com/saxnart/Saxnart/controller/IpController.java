@@ -51,6 +51,7 @@ public class IpController {
     @PostMapping("/create")
     public ResponseEntity<ResponseObject> createIp(@RequestBody IpEntity ipEntity) {
         try {
+
             IpEntity createdIp = ipService.createIp(ipEntity);
             return ResponseEntity.ok(new ResponseObject("ok", "Success", createdIp));
         }catch (Exception e) {

@@ -5,6 +5,7 @@ import com.saxnart.Saxnart.repository.IpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ public class IpService {
     }
 
     public IpEntity createIp(IpEntity ipEntity) {
+        ipEntity.setTime(new Date());
         return ipRepository.save(ipEntity);
     }
 
