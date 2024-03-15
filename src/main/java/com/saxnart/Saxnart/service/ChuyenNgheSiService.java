@@ -41,7 +41,6 @@ public class ChuyenNgheSiService {
 
     public String updateStatus(Long id) {
         ChuyenNgheSiEntity chuyenNgheSi = chuyenNgheSiRepository.findById(id).orElse(null);
-
         if (chuyenNgheSi != null) {
             chuyenNgheSi.setStatus(!chuyenNgheSi.getStatus());
             chuyenNgheSiRepository.save(chuyenNgheSi);
