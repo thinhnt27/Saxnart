@@ -238,6 +238,8 @@ public List<UserEntity> getAllUser() {
                 if (userPasswordUpdateDTO.getNewPassword().equals(userPasswordUpdateDTO.getConfirmPassword())) {
                     UserEntity user = this.getUserById(userId);
                     user.setHashedpassword(encoder.encode(userPasswordUpdateDTO.getNewPassword()));
+                    user.setAuthorModified(userPasswordUpdateDTO.getAuthorModified());
+                    user.setDateModified(new Date());
                     userRepository.save(user);
                 }else throw new UserException("confirm password is not correct");
             } else throw new UserException("old password is not correct ");

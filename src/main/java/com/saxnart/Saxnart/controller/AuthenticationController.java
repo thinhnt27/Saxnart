@@ -138,7 +138,7 @@ public class AuthenticationController {
     }
 
     @PatchMapping("/updateUserPassword/{userId}")
-    @PreAuthorize("hasRole('SUPERADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseObject> updateUserPassword(@RequestHeader("Authorization") String token,
                                                              @PathVariable Long userId,
                                                              @RequestBody UserPasswordUpdateDTO userPasswordUpdateDTO) {
