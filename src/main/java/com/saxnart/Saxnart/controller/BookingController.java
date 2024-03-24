@@ -31,7 +31,7 @@ public class BookingController {
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", message, ""));
             } else if (message.equals("Seat Id do not equal bookingSeatDTO's seat id")) {
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", message, ""));
-            } else return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", ""));
+            } else return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", message));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error creating booking", ""));
         }

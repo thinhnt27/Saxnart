@@ -14,14 +14,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,8 +55,11 @@ public class BookingService {
     @Autowired
     private ShowRepository showRepository;
 
+    @Autowired
+    private VNPayService vnPayService;
 
-    public String createBooking(BookingDTO bookingDTO) {
+
+    public String createBooking(BookingDTO bookingDTO) throws UnsupportedEncodingException {
         // Convert DTO to entities and save to the database
         List<BookingDetailDTO> bookingDetailDTOS = bookingDTO.getBookingDetails();
         double totalPrice = 0;
@@ -79,7 +81,7 @@ public class BookingService {
                 return "Seat Id do not equal bookingSeatDTO's seat id";
             }
         }
-        bookingRepository.save(bookingEntity);
+        BookingEntity booking = bookingRepository.save(bookingEntity);
         for (BookingDetailDTO bookingDetailDTO : bookingDTO.getBookingDetails()) {
             BookingDetailEntity bookingDetailEntity = convertToBookingDetailEntity(bookingDetailDTO, bookingEntity);
             bookingDetailRepository.save(bookingDetailEntity);
@@ -88,7 +90,9 @@ public class BookingService {
             BookingSeatEntity bookingSeatEntity = convertToBookingSeatEntity(bookingSeatDTO, bookingEntity);
             bookingSeatRepository.save(bookingSeatEntity);
         }
-        return "Success";
+        String url = vnPayService.getPayUrl((int) totalPrice, booking.getId());
+//        System.out.println(booking.getId());
+        return url;
     }
 
     public List<BookingDetailResponse> getBookingDetailsByShowTime(Long showTimeId) {
@@ -242,6 +246,62 @@ public class BookingService {
             }
         } else {
             return "Booking does not exist";
+        }
+    }
+
+    public void paymentVNPaySuccess(Long id) {
+        Optional<BookingEntity> bookingEntity = bookingRepository.findById(id);
+        MailConfigEntity mailConfigEntity = mailRepository.findAll().stream().findFirst().orElse(null);
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        if (bookingEntity.isPresent()) {
+            //Bỏ seat num vào mail gửi
+            List<BookingSeatEntity> bookingSeatEntities = bookingSeatRepository.findByBooking_Id(bookingEntity.get().getId());
+            StringBuilder seat = new StringBuilder();
+            for (int i = 0; i < bookingSeatEntities.size(); i++) {
+                seat.append(bookingSeatEntities.get(i).getSeat().getSeatNum());
+                if (i < bookingSeatEntities.size() - 1) {
+                    seat.append(", ");
+                }
+            }
+            String seatString = seat.toString();
+            //Format VNĐ
+            DecimalFormat decimalFormat = new DecimalFormat("###,###,###,### VNĐ");
+            String formatPrice = decimalFormat.format(bookingEntity.get().getTotalPrice());
+            if (mailConfigEntity != null) {
+                MimeMessage message = javaMailSender.createMimeMessage();
+                try {
+                    MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+                    helper.setFrom(mailConfigEntity.getUsername());
+                    helper.setTo(bookingEntity.get().getEmail());
+                    helper.setSubject("Xác nhận đặt vé thành công");
+                    String htmlBody = "<html><head><meta charset=\"UTF-8\"></head><body><div style=\"text-align: center;\">"
+                            + "<h2 style=\"font-weight: bold; color: black;\">Saxn'Art Club</h2>"
+                            + "<div style=\"display: inline-block; background-color: #f0f0f0; padding: 20px; border-radius: 10px; text-align: left;\">"
+                            + "<div style=\"border: 1px solid #000; border-radius: 10px; padding: 10px; color: black;\">"
+                            + "<p>Xin chào ,</p>"
+                            + "<p style=\"color: black;\">Saxn'Art xác nhận bạn đã đặt vé thành công lúc " + formatter.format(new Date())
+                            + ". Bấm vào ... để xem chi tiết</p>"
+                            + "<p style=\"font-weight: bold; color: black;\">Thông tin người nhận vé:</p>"
+                            + "<table style=\"color: black;\">"
+                            + "<tr><td>Họ và tên: </td><td>" + bookingEntity.get().getName() + "</td></tr>"
+                            + "<tr><td>Số điện thoại: </td><td>" + bookingEntity.get().getTelephoneNum() + "</td></tr>"
+                            + "<tr><td>Email: </td><td>" + bookingEntity.get().getEmail() + "</td></tr>"
+                            + "</table>"
+                            + "<p style=\"font-weight: bold; color: black;\">Chi tiết vé của bạn như sau:</p>"
+                            + "<p style=\"color: black;\">Ghế đặt: " + seatString + "</p>"
+                            + "<p style=\"color: black;\">Thời gian: " + format.format(bookingEntity.get().getShowtime().getShowDate()) + "</p>"
+                            + "<p style=\"font-weight: bold; color: black; text-align: right;\">Tổng tiền: " + formatPrice + "</p>"
+                            + "</div>"
+                            + "</div></div></body></html>";
+                    helper.setText(htmlBody, true);
+                    javaMailSender.send(message);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
+            }
+            bookingEntity.get().setIsPayment(true);
+            bookingRepository.save(bookingEntity.get());
         }
     }
 }
