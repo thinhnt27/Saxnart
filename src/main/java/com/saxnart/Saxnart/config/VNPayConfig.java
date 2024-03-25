@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class VNPayConfig {
 
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_ReturnUrl = "https://saxnartclub.com/thanks";
+    public static String vnp_ReturnUrl = "https://saxnartclub.com/thankyou";
 
     public static String vnp_TmnCode = "SAXNART1";
     public static String secretKey = "SULMHMOOQLFTAJQALSVMKPEYSWMFGEQO";
