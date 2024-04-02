@@ -25,6 +25,8 @@ public class BookingRequestDTO {
 
     private Boolean status;
 
+    private Boolean isPayment;
+
     private double totalPrice;
 
     private List<String> seatNum;

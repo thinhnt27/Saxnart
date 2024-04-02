@@ -124,7 +124,8 @@ public class BookingService {
             bookingRequestDTO.setContent(booking.getContent());
             bookingRequestDTO.setCreatedDate(booking.getCreatedDate());
             bookingRequestDTO.setStatus(booking.getStatus());
-            bookingRequestDTO.setTotalPrice(bookingRequestDTO.getTotalPrice());
+            bookingRequestDTO.setTotalPrice(booking.getTotalPrice());
+            bookingRequestDTO.setIsPayment(booking.getIsPayment());
             List<String> seatNum = new ArrayList<>();
             for (BookingSeatEntity bookingSeat : booking.getBookingSeats()) {
                 seatNum.add(bookingSeat.getSeat().getSeatNum());
