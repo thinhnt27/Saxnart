@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,10 +17,13 @@ import java.util.List;
 @RequestMapping("api/booking")
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000", "https://saxnartclub.com"})
+
 public class BookingController {
 
     @Autowired
     private BookingService bookingService;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @PostMapping("/create")
     public ResponseEntity<ResponseObject> createBooking(@RequestBody BookingDTO bookingDTO) {
@@ -49,6 +53,7 @@ public class BookingController {
     @GetMapping("/getAllBooking/{showtimeId}")
     public ResponseEntity<ResponseObject> getAllBookingByShow(@PathVariable Long showtimeId) {
         try {
+            jdbcTemplate.execute("CALL UpdateBookingStatus()");
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Success", bookingService.getAllBookingByShow(showtimeId)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Error get all booking by showId", ""));
