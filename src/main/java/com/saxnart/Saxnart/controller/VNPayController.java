@@ -104,7 +104,8 @@ public class VNPayController {
                             // Đơn hàng đã được xác nhận hoặc hủy bỏ
                             checkOrderStatus = false;
                         }
-                        if (Double.parseDouble(vnp_Amount) != bookingEntity.get().getTotalPrice()){
+
+                        if (Double.valueOf(vnp_TxnRef).doubleValue() != bookingEntity.get().getTotalPrice()){
                             checkAmount = false;
                         };
                     } else {
