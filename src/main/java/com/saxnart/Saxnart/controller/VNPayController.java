@@ -46,19 +46,19 @@ public class VNPayController {
 //
 //    }
 
-    @GetMapping
-    public ResponseEntity<ResponseObject> getPay(){
-        String stringPrice = "200000";
-        double price = 200000;
-        double change = Double.valueOf(stringPrice).doubleValue();
-        if ( change == price){
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseObject("Done", "Success", ""));
-        }else return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ResponseObject("Failed", "Not Success", ""));
-
-
-    }
+//    @GetMapping
+//    public ResponseEntity<ResponseObject> getPay(){
+//        String stringPrice = "200000";
+//        double price = 200000;
+//        double change = Double.valueOf(stringPrice).doubleValue();
+//        if ( change == price){
+//            return ResponseEntity.status(HttpStatus.OK)
+//                    .body(new ResponseObject("Done", "Success", ""));
+//        }else return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                .body(new ResponseObject("Failed", "Not Success", ""));
+//
+//
+//    }
 
 
     @GetMapping("/vnpay-payment")
@@ -119,8 +119,7 @@ public class VNPayController {
                             checkOrderStatus = false;
                         }
                         double priceChange = Double.valueOf(vnp_Amount).doubleValue();
-                        if (priceChange == bookingEntity.get().getTotalPrice()){
-                            System.out.println(priceChange + " <> " + bookingEntity.get().getTotalPrice());
+                        if (priceChange == bookingEntity.get().getTotalPrice() * 100){
                             checkAmount = true;
                         }else checkAmount = false;
                     } else {
