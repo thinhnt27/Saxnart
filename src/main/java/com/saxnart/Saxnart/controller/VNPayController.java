@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import com.saxnart.Saxnart.config.VNPayConfig;
+import com.saxnart.Saxnart.model.ResponeCustom;
 import com.saxnart.Saxnart.model.ResponseObject;
 import com.saxnart.Saxnart.service.BookingService;
 import com.saxnart.Saxnart.service.VNPayService;
@@ -49,7 +50,7 @@ public class VNPayController {
 
 
     @GetMapping("/vnpay-payment")
-    public ResponseEntity<ResponseObject> getPaymentInfor(@RequestParam(value = "vnp_Amount") String vnp_Amount,
+    public ResponseEntity<ResponeCustom> getPaymentInfor(@RequestParam(value = "vnp_Amount") String vnp_Amount,
                                                           @RequestParam(value = "vnp_BankCode") String vnp_BankCode,
                                                           @RequestParam(value = "vnp_BankTranNo") String vnp_BankTranNo,
                                                           @RequestParam(value = "vnp_CardType") String vnp_CardType,
@@ -77,23 +78,54 @@ public class VNPayController {
             encodeAndPut(fields, "vnp_TxnRef", vnp_TxnRef);
             encodeAndPut(fields, "vnp_SecureHash", vnp_SecureHash);
 
-            fields.remove("vnp_SecureHashType");
-            fields.remove("vnp_SecureHash");
-            String signValue = VNPayConfig.hashAllFields(fields);
-            if (signValue.equals(vnp_SecureHash)) {
-                if ("00".equals(vnp_TransactionStatus)) {
-                    bookingService.paymentVNPaySuccess(Long.valueOf(vnp_TxnRef));
-                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "GD Thanh cong", ""));
-                } else {
-                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "GD Khong thanh cong", ""));
-                }
-            } else {
-                return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("error", "Chu ky khong hop le", ""));
+            if (fields.containsKey("vnp_SecureHashType"))
+            {
+                fields.remove("vnp_SecureHashType");
             }
+            if (fields.containsKey("vnp_SecureHash"))
+            {
+                fields.remove("vnp_SecureHash");
+            }
+//            fields.remove("vnp_SecureHashType");
+//            fields.remove("vnp_SecureHash");
+            try {
+                String signValue = VNPayConfig.hashAllFields(fields);
+                if (signValue.equals(vnp_SecureHash)) {
+                    boolean checkOrderId = true; // vnp_TxnRef exists in your database
+                    boolean checkAmount = true; // vnp_Amount is valid (Check vnp_Amount VNPAY returns compared to the amount of the code (vnp_TxnRef) in the Your database).
+                    boolean checkOrderStatus = true; // PaymnentStatus = 0 (pending)
+
+                    if (checkOrderId) {
+                        if (checkAmount) {
+                            if (checkOrderStatus) {
+                                if ("00".equals(vnp_ResponseCode)) {
+                                    // Update PaymnentStatus = 1 into your Database
+                                    bookingService.paymentVNPaySuccess(Long.valueOf(vnp_TxnRef));
+                                    return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("00", "Confirm Success"));
+                                } else {
+                                    // Update PaymnentStatus = 2 into your Database
+                                    return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("02", "Order already confirmed"));
+                                }
+                            } else {
+                                return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("02", "Order already confirmed"));
+                            }
+                        } else {
+                            return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("04", "Invalid Amount"));
+                        }
+                    } else {
+                        return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("01", "Order not Found"));
+                    }
+                } else {
+                    return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("97", "Invalid Checksum"));
+                }
+            } catch(Exception e) {
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("99", "Unknown error"));
+            }
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ResponseObject("failed", e.getMessage(), ""));
+                    .body(new ResponeCustom("failed", e.getMessage()));
         }
 
     }
