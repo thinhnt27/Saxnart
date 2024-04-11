@@ -105,7 +105,7 @@ public class VNPayController {
                             checkOrderStatus = false;
                         }
 
-                        if (Double.valueOf(vnp_TxnRef).doubleValue() != bookingEntity.get().getTotalPrice()){
+                        if (Double.valueOf(vnp_Amount).doubleValue() != bookingEntity.get().getTotalPrice()){
                             checkAmount = false;
                         };
                     } else {
