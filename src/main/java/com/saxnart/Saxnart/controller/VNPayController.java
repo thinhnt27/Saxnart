@@ -3,18 +3,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 import com.saxnart.Saxnart.config.VNPayConfig;
+import com.saxnart.Saxnart.entity.BookingEntity;
 import com.saxnart.Saxnart.model.ResponeCustom;
 import com.saxnart.Saxnart.model.ResponseObject;
+import com.saxnart.Saxnart.repository.BookingRepository;
 import com.saxnart.Saxnart.service.BookingService;
 import com.saxnart.Saxnart.service.VNPayService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +26,9 @@ public class VNPayController {
 
     @Autowired
     private VNPayService vnPayService;
+
+    @Autowired
+    BookingRepository bookingRepository;
 
     @Autowired
     private BookingService bookingService;
@@ -94,6 +92,22 @@ public class VNPayController {
                     boolean checkOrderId = true; // vnp_TxnRef exists in your database
                     boolean checkAmount = true; // vnp_Amount is valid (Check vnp_Amount VNPAY returns compared to the amount of the code (vnp_TxnRef) in the Your database).
                     boolean checkOrderStatus = true; // PaymnentStatus = 0 (pending)
+                    Optional<BookingEntity> bookingEntity = bookingRepository.findById(Long.valueOf(vnp_TxnRef));
+                    if (bookingEntity.isPresent()) {
+                        // Đơn hàng tồn tại trong cơ sở dữ liệu
+                        checkOrderId = true;
+                        // Kiểm tra trạng thái đơn hàng
+                        if (bookingEntity.get().getIsPayment() == false) {
+                            // Đơn hàng đang ở trạng thái "pending"
+                            checkOrderStatus = true;
+                        } else {
+                            // Đơn hàng đã được xác nhận hoặc hủy bỏ
+                            checkOrderStatus = false;
+                        }
+                    } else {
+                        // Đơn hàng không tồn tại trong cơ sở dữ liệu
+                        checkOrderId = false;
+                    }
 
                     if (checkOrderId) {
                         if (checkAmount) {
@@ -103,8 +117,9 @@ public class VNPayController {
                                     bookingService.paymentVNPaySuccess(Long.valueOf(vnp_TxnRef));
                                     return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("00", "Confirm Success"));
                                 } else {
-                                    // Update PaymnentStatus = 2 into your Database
-                                    return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("02", "Order already confirmed"));
+                                    return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("00", "Confirm Success"));
+//                                    // Update PaymnentStatus = 2 into your Database
+//                                    return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("02", "Order already confirmed"));
                                 }
                             } else {
                                 return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("02", "Order already confirmed"));
