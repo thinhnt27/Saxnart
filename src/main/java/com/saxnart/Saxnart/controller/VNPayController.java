@@ -46,6 +46,20 @@ public class VNPayController {
 //
 //    }
 
+    @GetMapping
+    public ResponseEntity<ResponseObject> getPay(){
+        String stringPrice = "200000";
+        double price = 200000;
+        double change = Double.valueOf(stringPrice).doubleValue();
+        if ( change == price){
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("Done", "Success", ""));
+        }else return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ResponseObject("Failed", "Not Success", ""));
+
+
+    }
+
 
     @GetMapping("/vnpay-payment")
     public ResponseEntity<ResponeCustom> getPaymentInfor(@RequestParam(value = "vnp_Amount") String vnp_Amount,
@@ -95,7 +109,7 @@ public class VNPayController {
                     Optional<BookingEntity> bookingEntity = bookingRepository.findById(Long.valueOf(vnp_TxnRef));
                     if (bookingEntity.isPresent()) {
                         // Đơn hàng tồn tại trong cơ sở dữ liệu
-                        checkOrderId = true;
+//                        checkOrderId = true;
                         // Kiểm tra trạng thái đơn hàng
                         if (bookingEntity.get().getIsPayment() == false) {
                             // Đơn hàng đang ở trạng thái "pending"
@@ -104,10 +118,11 @@ public class VNPayController {
                             // Đơn hàng đã được xác nhận hoặc hủy bỏ
                             checkOrderStatus = false;
                         }
-
-                        if (Double.valueOf(vnp_Amount).doubleValue() != bookingEntity.get().getTotalPrice()){
-                            checkAmount = false;
-                        };
+                        double priceChange = Double.valueOf(vnp_Amount).doubleValue();
+                        if (priceChange == bookingEntity.get().getTotalPrice()){
+                            System.out.println(priceChange + " <> " + bookingEntity.get().getTotalPrice());
+                            checkAmount = true;
+                        }else checkAmount = false;
                     } else {
                         // Đơn hàng không tồn tại trong cơ sở dữ liệu
                         checkOrderId = false;
