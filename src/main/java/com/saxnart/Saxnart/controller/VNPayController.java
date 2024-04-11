@@ -120,6 +120,8 @@ public class VNPayController {
                                     bookingService.paymentVNPaySuccess(Long.valueOf(vnp_TxnRef));
                                     return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("00", "Confirm Success"));
                                 } else {
+                                    bookingEntity.get().setIsPayment(null);
+                                    bookingRepository.save(bookingEntity.get());
                                     return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("00", "Confirm Success"));
 //                                    // Update PaymnentStatus = 2 into your Database
 //                                    return ResponseEntity.status(HttpStatus.OK).body(new ResponeCustom("02", "Order already confirmed"));
