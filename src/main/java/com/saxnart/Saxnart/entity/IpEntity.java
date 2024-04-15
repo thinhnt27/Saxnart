@@ -31,4 +31,8 @@ public class IpEntity {
     private Date time;
 
     private String link;
+
+    private Boolean whiteList;
+
+    private Boolean backList;
 }
