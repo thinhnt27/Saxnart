@@ -13,7 +13,7 @@ import java.util.*;
 public class VNPayService {
 
 
-    public String getPayUrl(int totalPrice, Long id) throws UnsupportedEncodingException {
+    public String getPayUrl(int totalPrice, Long id, String vnp_IpAddr) throws UnsupportedEncodingException {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
@@ -21,7 +21,7 @@ public class VNPayService {
         //String bankCode = "";
 
         String vnp_TxnRef = String.valueOf(id);
-        String vnp_IpAddr = "127.0.0.1";
+//        String vnp_IpAddr = ip;
 
         String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
         Map<String, String> vnp_Params = new HashMap<>();

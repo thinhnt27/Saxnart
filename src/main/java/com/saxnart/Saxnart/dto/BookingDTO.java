@@ -26,4 +26,5 @@ public class BookingDTO {
     private List<BookingSeatDTO> bookingSeats;
     private List<BookingDetailDTO> bookingDetails;
     private Long showtimeId;
+    private String ip;
 }

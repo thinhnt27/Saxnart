@@ -90,7 +90,7 @@ public class BookingService {
             BookingSeatEntity bookingSeatEntity = convertToBookingSeatEntity(bookingSeatDTO, bookingEntity);
             bookingSeatRepository.save(bookingSeatEntity);
         }
-        String url = vnPayService.getPayUrl((int) totalPrice, booking.getId());
+        String url = vnPayService.getPayUrl((int) totalPrice, booking.getId(), bookingDTO.getIp());
 //        System.out.println(booking.getId());
         return url;
     }
