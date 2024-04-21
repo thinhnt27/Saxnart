@@ -49,6 +49,9 @@ public class BookingEntity {
     @Column
     private double totalPrice;
 
+    @Column
+    private String ip;
+
     @OneToMany(mappedBy = "booking")
     private Set<BookingSeatEntity> bookingSeats = new HashSet<>();
 
@@ -59,6 +62,8 @@ public class BookingEntity {
     @JsonIgnore
     @JoinColumn(name = "showtime_id")
     private ShowEntity showtime;
+
+
 
 
     @Override

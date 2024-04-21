@@ -38,6 +38,7 @@ public class ConvertDTO {
         bookingEntity.setTelephoneNum(bookingDTO.getTelephoneNum());
         bookingEntity.setContent(bookingDTO.getContent());
         bookingEntity.setIsPayment(bookingDTO.getIsPayment());
+        bookingEntity.setIp(bookingDTO.getIp());
         // Convert String to Date (you might want to use LocalDate or LocalDateTime)
         //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         //LocalDateTime createdDate = LocalDateTime.parse(bookingDTO.getCreatedDate(), formatter);
