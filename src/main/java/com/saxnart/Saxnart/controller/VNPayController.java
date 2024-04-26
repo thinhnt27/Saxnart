@@ -12,8 +12,10 @@ import com.saxnart.Saxnart.model.ResponseObject;
 import com.saxnart.Saxnart.repository.BookingRepository;
 import com.saxnart.Saxnart.service.BookingService;
 import com.saxnart.Saxnart.service.VNPayService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -73,8 +75,11 @@ public class VNPayController {
                                                           @RequestParam(value = "vnp_TransactionNo") String vnp_TransactionNo,
                                                           @RequestParam(value = "vnp_TransactionStatus") String vnp_TransactionStatus,
                                                           @RequestParam(value = "vnp_TxnRef") String vnp_TxnRef,
-                                                          @RequestParam(value = "vnp_SecureHash") String vnp_SecureHash) {
+                                                          @RequestParam(value = "vnp_SecureHash") String vnp_SecureHash,
+                                                         HttpServletRequest request) {
 
+        String remoteAddr = request.getRemoteAddr();
+        System.out.println(remoteAddr);
         Map fields = new HashMap();
         try {
             encodeAndPut(fields, "vnp_Amount", vnp_Amount);
