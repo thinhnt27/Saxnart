@@ -78,7 +78,9 @@ public class VNPayController {
                                                           @RequestParam(value = "vnp_SecureHash") String vnp_SecureHash,
                                                          HttpServletRequest request) {
 
+        String headerAddr = request.getHeader("X-Forwarded-For");
         String remoteAddr = request.getRemoteAddr();
+        System.out.println(headerAddr);
         System.out.println(remoteAddr);
         Map fields = new HashMap();
         try {
