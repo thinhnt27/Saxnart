@@ -44,7 +44,7 @@ public class MailService {
         }
     }
     public String validMail(String mail) {
-        sendEmail(mail, "No Reply <info@saxnartclub.com>", "<i>This is a test email sent from the server.</i><br><br>Sent from info@saxnartclub.com");
+        sendEmail(mail, "No Reply", "This is a test email sent from the server\n\nSent from info@saxnartclub.com");
         return "Success";
     }
     private void sendEmail(String to, String subject, String text) {
